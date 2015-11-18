@@ -25,6 +25,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 == Changelog ==
 = .1.1 =
 * Added readme.txt
+* Added link to view full report in WordPress admin.
 
 = .1 =
 * Initial version of the plugin.

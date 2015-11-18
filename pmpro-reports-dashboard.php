@@ -19,6 +19,8 @@ function init_pmpro_reports_dashboard()
 		<style>
 			body {background: #FAFAFA; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 16px; font-size: 1.6rem; line-height: 2.6rem; margin: 0; padding: 0; }
 			div {background: #FAFAFA; border-bottom: 5px solid #EEE; padding: 2rem .5rem; }
+			p {font-size: 10px; font-size: 1rem; margin: 0; padding: 0; }
+			p a {color: #AAA; text-transform: uppercase; }
 			table {border: 1px solid #EEE; border-collapse: separate; border-spacing: 0; width: 100%; }
 			thead th {background: #EEE; font-size: 12px; font-size: 1.2rem; line-height: 2rem; padding: 1rem .5rem; text-align: left; }
 			tbody th {border-top: 1px solid #EEE; font-size: 12px; font-size: 1.2rem; line-height: 2rem; padding: 1rem .5rem; text-align: left; }
@@ -39,6 +41,9 @@ function init_pmpro_reports_dashboard()
 			<div id="pmpro_report_<?php echo $report; ?>">			
 				<h2><?php echo $title; ?></h2>
 				<?php call_user_func("pmpro_report_" . $report . "_widget"); ?>
+				<p style="text-align:center;">
+					<a href="<?php echo admin_url("admin.php?page=pmpro-reports&report=" . $report);?>"><?php _e('Full Report', 'pmpro');?></a>
+				</p>
 			</div>
 			<?php
 		}		
