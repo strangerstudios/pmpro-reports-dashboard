@@ -2,7 +2,7 @@
 Contributors: strangerstudios
 Tags: pmpro, reports, admin, mobile reports
 Requires at least: 3.5
-Tested up to: 4.3
+Tested up to: 4.8
 Stable tag: .2
 
 == Description ==
@@ -24,6 +24,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 == Changelog ==
 = .2 =
+* ENHANCEMENT: Added links to plugin row meta to view reports and access plugin documentation.
 * ENHANCEMENT: Added filter to customize the included reports, titles, and display order.
 * BUG: Fixed display for new toggle rows for Membership Signups report
 
