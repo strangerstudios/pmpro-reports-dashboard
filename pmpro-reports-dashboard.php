@@ -28,11 +28,15 @@ function init_pmpro_reports_dashboard()
 			tbody tr:nth-child(odd) td, tbody tr:nth-child(odd) th {background: #FFF; }
 			h2 {color: #AAA; font-size: 18px; font-size: 1.8rem; font-weight: 300; letter-spacing: 1px; margin: 0 0 1rem 0; padding: 0; text-transform: uppercase; }
 			#pmpro_report_sales thead th:last-child {text-align: right; }
+			#pmpro_report_memberships .pmpro_report_tr_sub {display: table-row !important; }
+			#pmpro_report_memberships .pmpro_report_tr button {background: none; border: none; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 0;}
+			#pmpro_report_memberships .pmpro_report_tr_sub th, #pmpro_report_memberships .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
 		</style>			
 
 		<?php
 		//report widgets
 		krsort($pmpro_reports);
+		$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
 		foreach($pmpro_reports as $report => $title)
 		{
 			//make sure title is translated (since these are set before translations happen)
@@ -46,7 +50,7 @@ function init_pmpro_reports_dashboard()
 				</p>
 			</div>
 			<?php
-		}		
+		}	
 		exit;
 	}
 }

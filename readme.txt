@@ -3,7 +3,7 @@ Contributors: strangerstudios
 Tags: pmpro, reports, admin, mobile reports
 Requires at least: 3.5
 Tested up to: 4.3
-Stable tag: .1.1
+Stable tag: .2
 
 == Description ==
 Responsive Membership Reports Dashboard for Admins and Membership Manager Role. Quick overview of the most important stats for your membership site.
@@ -23,6 +23,10 @@ Simply install and activate the plugin and the reports dashboard will be added t
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-reports-dashboard/issues
 
 == Changelog ==
+= .2 =
+* ENHANCEMENT: Added filter to customize the included reports, titles, and display order.
+* BUG: Fixed display for new toggle rows for Membership Signups report
+
 = .1.1 =
 * Added readme.txt
 * Added link to view full report in WordPress admin.
