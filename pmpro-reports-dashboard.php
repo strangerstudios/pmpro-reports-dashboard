@@ -14,8 +14,11 @@ function init_pmpro_reports_dashboard()
 	if(!empty($_REQUEST['pmpro_reports']) && (current_user_can('administrator') || current_user_can('pmpro_membership_manager')) )
 	{
 		?>
+		<html>
+		<head>
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<link rel="stylesheet" id="googleFonts-css" href="//fonts.googleapis.com/css?family=Lato:400,700&ver=4.3.1" type="text/css" media="all">
+		<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 		<style>
 			body {background: #FAFAFA; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 16px; font-size: 1.6rem; line-height: 2.6rem; margin: 0; padding: 0; }
 			div {background: #FAFAFA; border-bottom: 5px solid #EEE; padding: 2rem .5rem; }
@@ -28,10 +31,13 @@ function init_pmpro_reports_dashboard()
 			tbody tr:nth-child(odd) td, tbody tr:nth-child(odd) th {background: #FFF; }
 			h2 {color: #AAA; font-size: 18px; font-size: 1.8rem; font-weight: 300; letter-spacing: 1px; margin: 0 0 1rem 0; padding: 0; text-transform: uppercase; }
 			#pmpro_report_sales thead th:last-child {text-align: right; }
-			#pmpro_report_memberships .pmpro_report_tr_sub {display: table-row !important; }
-			#pmpro_report_memberships .pmpro_report_tr button {background: none; border: none; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 0;}
-			#pmpro_report_memberships .pmpro_report_tr_sub th, #pmpro_report_memberships .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
-		</style>			
+			.pmpro_report_tr_sub {display: table-row !important; }
+			.pmpro_report_tr button {background: none; border: none; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 0;}
+			.pmpro_report_tr_sub th, .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
+
+		</style>
+		</head>	
+		<body>	
 
 		<?php
 		//report widgets
@@ -50,7 +56,11 @@ function init_pmpro_reports_dashboard()
 				</p>
 			</div>
 			<?php
-		}	
+		}
+		?>
+		</body>
+		</html>
+		<?php	
 		exit;
 	}
 }
