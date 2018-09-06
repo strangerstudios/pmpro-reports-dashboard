@@ -1,9 +1,9 @@
 === Paid Memberships Pro - Reports Dashboard Add On ===
 Contributors: strangerstudios
 Tags: pmpro, reports, admin, mobile reports
-Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: .2
+Requires at least: 4.0
+Tested up to: 4.9.8
+Stable tag: .3
 
 == Description ==
 Responsive Membership Reports Dashboard for Admins and Membership Manager Role. Quick overview of the most important stats for your membership site.
@@ -23,6 +23,9 @@ Simply install and activate the plugin and the reports dashboard will be added t
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-reports-dashboard/issues
 
 == Changelog ==
+= .3 =
+* ENHANCEMENT: Added some wrapping html, including jquery, and opening up the new sales widget sub rows.
+
 = .2 =
 * ENHANCEMENT: Added links to plugin row meta to view reports and access plugin documentation.
 * ENHANCEMENT: Added filter to customize the included reports, titles, and display order.

@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Reports Dashboard Add On
 Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-reports-dashboard/
 Description: Responsive Membership Reports Dashboard for Administrator and Membership Manager Role.
-Version: .2
+Version: .3
 Author: Stranger Studios
 Author URI: http://www.strangerstudios.com
 */
