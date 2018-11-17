@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Paid Memberships Pro - Reports Dashboard Add On
-Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-reports-dashboard/
+Plugin URI: https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/
 Description: Responsive Membership Reports Dashboard for Administrator and Membership Manager Role.
 Version: .3
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
+Author: Paid Memberships Pro
+Author URI: https://www.paidmembershipspro.com/
 */
 
 function init_pmpro_reports_dashboard()
@@ -89,8 +89,8 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'pmprordb_add_ac
 function pmprordb_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-reports-dashboard.php' ) !== false) {
 		$new_links = array(
-			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/plus-add-ons/responsive-reports-dashboard/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
 	}
