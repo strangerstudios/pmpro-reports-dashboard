@@ -30,11 +30,11 @@ function init_pmpro_reports_dashboard()
 			tbody td {border-top: 1px solid #EEE; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 1rem .5rem; text-align: left; }
 			tbody tr:nth-child(odd) td, tbody tr:nth-child(odd) th {background: #FFF; }
 			h2 {color: #AAA; font-size: 18px; font-size: 1.8rem; font-weight: 300; letter-spacing: 1px; margin: 0 0 1rem 0; padding: 0; text-transform: uppercase; }
-			#pmpro_report_sales thead th:last-child {text-align: right; }
+			#pmpro_report_sales thead th:last-child, #pmpro_report_sales tbody td:last-child {text-align: right; }
 			.pmpro_report_tr_sub {display: table-row !important; }
 			.pmpro_report_tr button {background: none; border: none; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 0;}
 			.pmpro_report_tr_sub th, .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
-
+			.pmpro_report-button {margin: 1em 0 0 0; text-align: center;}
 		</style>
 		</head>	
 		<body>	
@@ -51,9 +51,6 @@ function init_pmpro_reports_dashboard()
 			<div id="pmpro_report_<?php echo $report; ?>">			
 				<h2><?php echo $title; ?></h2>
 				<?php call_user_func("pmpro_report_" . $report . "_widget"); ?>
-				<p style="text-align:center;">
-					<a href="<?php echo admin_url("admin.php?page=pmpro-reports&report=" . $report);?>"><?php _e('Full Report', 'pmpro');?></a>
-				</p>
 			</div>
 			<?php
 		}
@@ -64,7 +61,7 @@ function init_pmpro_reports_dashboard()
 		exit;
 	}
 }
-add_action('init', 'init_pmpro_reports_dashboard');
+add_action('init', 'init_pmpro_reports_dashboard', 99);
 
 /**
  * Add links to the plugin action links
