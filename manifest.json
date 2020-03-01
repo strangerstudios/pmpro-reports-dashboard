@@ -1,0 +1,17 @@
+{
+  "short_name": "PMPro",
+  "name": "PMPro Reports Dashboard",
+  "description": "Mobile reports for your PMPro-powered membership site.",
+  "icons": [
+    {
+      "src": "/pmpro-reports-dashboard/images/icon-180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }  
+  ],
+  "start_url": "/pmpro-reports-dashboard/",
+  "background_color": "#FAFAFA",
+  "display": "standalone",
+  "scope": "/pmpro-reports-dashboard/",
+  "theme_color": "#404040"
+}

@@ -5,6 +5,7 @@
 	<head>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" id="googleFonts-css" href="//fonts.googleapis.com/css?family=Lato:400,700&ver=4.3.1" type="text/css" media="all">
+	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js', dirname( __FILE__ ) ) );?>'></script>
 	<style>

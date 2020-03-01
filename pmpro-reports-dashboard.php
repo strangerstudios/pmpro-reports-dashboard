@@ -21,21 +21,33 @@ function pmprord_controller()
 		return;
 	}
 	
-	if ( ! current_user_can( 'administrator' ) && ! current_user_can( 'pmpro_membership_manager' ) ) {
-		return;
-	}
+	//if ( ! current_user_can( 'administrator' ) && ! current_user_can( 'pmpro_membership_manager' ) ) {
+	//	return;
+	//}
 	
 	$action = get_query_var( 'pmpro_reports_action' );
-		
-	if ( $action == 'sw' ) {
-		// load the SW JS		
-		header('Content-Type: application/javascript');
-		require_once ( ABSPATH . '/wp-admin/includes/file.php' );
-		WP_Filesystem();		
-		echo $wp_filesystem->get_contents( PMPRORD_DIR . '/js/sw.js' );		
-	} else {
-		// load the dashboard HTML
-		include( 'includes/dashboard.php' );
+	
+	require_once ( ABSPATH . '/wp-admin/includes/file.php' );
+	WP_Filesystem();
+	
+	switch( $action ) {
+		case 'sw':
+			// load the SW JS
+			header('Content-Type: application/javascript');			
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/js/sw.js' );
+			break;
+		case 'manifest':
+			// load the PWA manifest
+			header('Content-Type: application/json');			
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/manifest.json' );
+			break;
+		case 'icon':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-180.png' );
+			break;
+		default:
+			include( 'includes/dashboard.php' );
 	}
 	
 	exit;
@@ -56,6 +68,8 @@ add_filter( 'query_vars', 'pmprord_query_vars', 10, 1 );
  */
 function pmprordb_add_rewrite_rule() {	
 	add_rewrite_rule( '^pmpro-reports-dashboard/sw.js$', 'index.php?pmpro_reports_action=sw', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/manifest.json$', 'index.php?pmpro_reports_action=manifest', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-180.png$', 'index.php?pmpro_reports_action=icon', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard', 'index.php?pmpro_reports_action=dashboard', 'top' );
 	
 	flush_rewrite_rules();
@@ -68,7 +82,7 @@ add_action( 'init', 'pmprordb_add_rewrite_rule' );
  */
 function pmprordb_redirect_canonical_callback( $redirect_url, $requested_url ) {
 	$action = get_query_var( 'pmpro_reports_action' );	
-	if ( $action == 'sw' ) {
+	if ( in_array( $action, array( 'sw', 'manifest', 'icon' ) ) ) {
 		return $requested_url;
 	}
 	
