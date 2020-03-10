@@ -41,10 +41,15 @@ function pmprord_controller()
 			header('Content-Type: application/json');			
 			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/manifest.json' );
 			break;
-		case 'icon':
+		case 'icon180':
 			// load the app icon
 			header('Content-Type: image/png');
 			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-180.png' );
+			break;
+		case 'icon750':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-750.png' );
 			break;
 		default:
 			include( 'includes/dashboard.php' );
@@ -69,7 +74,8 @@ add_filter( 'query_vars', 'pmprord_query_vars', 10, 1 );
 function pmprordb_add_rewrite_rule() {	
 	add_rewrite_rule( '^pmpro-reports-dashboard/sw.js$', 'index.php?pmpro_reports_action=sw', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/manifest.json$', 'index.php?pmpro_reports_action=manifest', 'top' );
-	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-180.png$', 'index.php?pmpro_reports_action=icon', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-180.png$', 'index.php?pmpro_reports_action=icon180', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-750.png$', 'index.php?pmpro_reports_action=icon750', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard', 'index.php?pmpro_reports_action=dashboard', 'top' );
 	
 	flush_rewrite_rules();
