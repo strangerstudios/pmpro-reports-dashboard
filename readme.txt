@@ -8,7 +8,6 @@ Stable tag: .3
 == Description ==
 Responsive Membership Reports Dashboard for Admins and Membership Manager Role. Quick overview of the most important stats for your membership site.
 
-Features:
 Simply install and activate the plugin and the reports dashboard will be added to your site at the URL www.YOURDOMAIN.com/?pmpro_reports=true. You must be logged in as the administrator or membership manager role to view the page. Others will be redirected to the home_url.
 
 == Installation ==
