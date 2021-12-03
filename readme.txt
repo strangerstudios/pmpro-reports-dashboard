@@ -1,9 +1,10 @@
 === Paid Memberships Pro - Reports Dashboard Add On ===
 Contributors: strangerstudios
 Tags: pmpro, reports, admin, mobile reports
-Requires at least: 4.0
-Tested up to: 4.9.8
-Stable tag: .3
+Requires at least: 5.2
+Tested up to: 5.8.2
+Requires PHP: 5.6
+Stable tag: .3.1
 
 == Description ==
 Responsive Membership Reports Dashboard for Admins and Membership Manager Role. Quick overview of the most important stats for your membership site.
@@ -22,6 +23,14 @@ Simply install and activate the plugin and the reports dashboard will be added t
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-reports-dashboard/issues
 
 == Changelog ==
+
+= 0.3 - 2021-12-03 =
+* BUG FIX/ENHANCEMENT: Removed duplicate button to view detailed report in WordPress admin.
+* BUG FIX/ENHANCEMENT: Improved CSS to fix the toggle buttons to show/hide per-price rows in reports.
+* BUG FIX/ENHANCEMENT: Removed loading an unnecessary Google Font and replaced with a default web safe font.
+* ENHANCEMENT: Updated tested up to value for WordPress to v5.8.2
+* ENHANCEMENT: Wrapped all strings for translation and added GitHub action to generate translations.
+
 = .3 =
 * ENHANCEMENT: Added some wrapping html, including jquery, and opening up the new sales widget sub rows.
 
