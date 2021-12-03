@@ -24,7 +24,7 @@ Please post it in the issues section of GitHub and we'll fix it as soon as we ca
 
 == Changelog ==
 
-= 0.3 - 2021-12-03 =
+= 0.3.1 - 2021-12-03 =
 * BUG FIX/ENHANCEMENT: Removed duplicate button to view detailed report in WordPress admin.
 * BUG FIX/ENHANCEMENT: Improved CSS to fix the toggle buttons to show/hide per-price rows in reports.
 * BUG FIX/ENHANCEMENT: Removed loading an unnecessary Google Font and replaced with a default web safe font.
