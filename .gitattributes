@@ -1,0 +1,8 @@
+# Ignore
+
+# Directories
+/.github export-ignore
+
+# Files
+.gitattributes export-ignore
+README.md export-ignore

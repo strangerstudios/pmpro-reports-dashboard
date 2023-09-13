@@ -1,0 +1,55 @@
+# Copyright (C) 2021 Paid Memberships Pro
+# This file is distributed under the same license as the Paid Memberships Pro - Reports Dashboard Add On plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Paid Memberships Pro - Reports Dashboard Add On .3\n"
+"Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
+"Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-12-03T10:30:23+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.5.0\n"
+"X-Domain: pmpro-reports-dashboard\n"
+
+#. Plugin Name of the plugin
+msgid "Paid Memberships Pro - Reports Dashboard Add On"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Responsive Membership Reports Dashboard for Administrator and Membership Manager Role."
+msgstr ""
+
+#. Author of the plugin
+msgid "Paid Memberships Pro"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.paidmembershipspro.com"
+msgstr ""
+
+#: pmpro-reports-dashboard.php:85
+msgid "View Reports"
+msgstr ""
+
+#: pmpro-reports-dashboard.php:102
+msgid "View Documentation"
+msgstr ""
+
+#: pmpro-reports-dashboard.php:102
+msgid "Docs"
+msgstr ""
+
+#: pmpro-reports-dashboard.php:103
+msgid "Visit Customer Support Forum"
+msgstr ""
+
+#: pmpro-reports-dashboard.php:103
+msgid "Support"
+msgstr ""

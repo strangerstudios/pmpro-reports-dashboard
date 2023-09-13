@@ -1,11 +1,13 @@
 <?php
 /*
 Plugin Name: Paid Memberships Pro - Reports Dashboard Add On
-Plugin URI: http://www.paidmembershipspro.com/wp/pmpro-reports-dashboard/
+Plugin URI: https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/
 Description: Responsive Membership Reports Dashboard for Administrator and Membership Manager Role.
-Version: .3
-Author: Stranger Studios
-Author URI: http://www.strangerstudios.com
+Version: .3.1
+Author: Paid Memberships Pro
+Author URI: https://www.paidmembershipspro.com
+Text Domain: pmpro-reports-dashboard
+Domain Path: /languages
 */
 
 define( 'PMPRORD_DIR', plugin_dir_path( __FILE__ ) );
@@ -105,7 +107,7 @@ add_filter( 'redirect_canonical', 'pmprordb_redirect_canonical_callback', 100, 2
  */
 function pmprordb_add_action_links( $links ) {
     $new_links = array(
-        '<a href="' . esc_url( add_query_arg( 'pmpro_reports', '1', site_url() ) )  . '" title="' . esc_attr( __( 'View Reports', 'pmpro' ) ) . '">' . __( 'View Reports', 'pmpro' ) . '</a>',
+        '<a href="' . esc_url( add_query_arg( 'pmpro_reports', 'true', site_url() ) )  . '" title="' . esc_attr( __( 'View Reports', 'pmpro-reports-dashboard' ) ) . '">' . __( 'View Reports', 'pmpro-reports-dashboard' ) . '</a>',
     );
     return array_merge( $new_links, $links );
 }
@@ -121,8 +123,8 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'pmprordb_add_ac
 function pmprordb_plugin_row_meta( $links, $file ) {
 	if ( strpos( $file, 'pmpro-reports-dashboard.php' ) !== false) {
 		$new_links = array(
-			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/plus-add-ons/responsive-reports-dashboard/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro' ) ) . '">' . __( 'Docs', 'pmpro' ) . '</a>',
-			'<a href="' . esc_url('http://paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro' ) ) . '">' . __( 'Support', 'pmpro' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/')  . '" title="' . esc_attr( __( 'View Documentation', 'pmpro-reports-dashboard' ) ) . '">' . __( 'Docs', 'pmpro-reports-dashboard' ) . '</a>',
+			'<a href="' . esc_url('https://www.paidmembershipspro.com/support/') . '" title="' . esc_attr( __( 'Visit Customer Support Forum', 'pmpro-reports-dashboard' ) ) . '">' . __( 'Support', 'pmpro-reports-dashboard' ) . '</a>',
 		);
 		$links = array_merge( $links, $new_links );
 	}
