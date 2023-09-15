@@ -8,6 +8,10 @@
 	<link rel="stylesheet" id="googleFonts-css" href="//fonts.googleapis.com/css?family=Lato:400,700&ver=4.3.1" type="text/css" media="all">
 	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<link rel="apple-touch-icon" href="/pmpro-reports-dashboard/icon-180.png" />
+	<script type="text/javascript">
+		//Should we create a settings to let User choose which reports to show and in what order?
+	const reports = <?php global  $pmpro_reports; echo json_encode( $pmpro_reports );?>;
+	</script>
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js', dirname( __FILE__ ) ) );?>'></script>
 	<style>
@@ -28,26 +32,8 @@
 	</style>
 	</head>	
 	<body>	
-
-	<?php
-	//report widgets
-	krsort($pmpro_reports);
-	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
-	foreach($pmpro_reports as $report => $title)
-	{
-		//make sure title is translated (since these are set before translations happen)
-		$title = __($title, "pmpro");
-		?>
-		<div id="pmpro_report_<?php echo $report; ?>">			
-			<h2><?php echo $title; ?></h2>
-			<?php call_user_func("pmpro_report_" . $report . "_widget"); ?>
-			<p style="text-align:center;">
-				<a href="<?php echo admin_url("admin.php?page=pmpro-reports&report=" . $report);?>"><?php _e('Full Report', 'pmpro');?></a>
-			</p>
+		<div class="ajax-reports-pwa">
 		</div>
-		<?php
-	}
-	?>
 	</body>
 		
 </html>
