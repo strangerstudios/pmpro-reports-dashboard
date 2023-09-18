@@ -1,5 +1,8 @@
 <?php
 	global $current_user, $wpdb, $pmpro_reports;
+
+	krsort( $pmpro_reports );
+	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
 ?>
 <html>
 	<head>
@@ -9,8 +12,7 @@
 	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<link rel="apple-touch-icon" href="/pmpro-reports-dashboard/icon-180.png" />
 	<script type="text/javascript">
-		//Should we create a settings to let User choose which reports to show and in what order?
-	const reports = <?php global  $pmpro_reports; echo json_encode( $pmpro_reports );?>;
+		const reports = <?php echo json_encode( $pmpro_reports );?>;
 	</script>
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js', dirname( __FILE__ ) ) );?>'></script>
@@ -34,6 +36,5 @@
 	<body>	
 		<div class="ajax-reports-pwa">
 		</div>
-	</body>
-		
+	</body>	
 </html>
