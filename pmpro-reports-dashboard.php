@@ -147,7 +147,19 @@ function pmpro_reports_ajax( ) {
 	 wp_die();
 }
 
+/**
+ * AJAX callback for the reports dashboard when user is not logged in.
+ * @since TBD
+ */
+function pmpro_reports_ajax_no_priv( ) {
+	echo '<div class="pmpro_message pmpro_error">';
+	echo esc_html__( 'Reports Page requires user is logged in to see it.', 'pmpro-reports-dashboard' );
+	echo '</div>';
+	wp_die();
+}
+
 add_action("wp_ajax_pmpro_reports_ajax", "pmpro_reports_ajax");
+add_action("wp_ajax_nopriv_pmpro_reports_ajax", "pmpro_reports_ajax_no_priv");
 
 
 

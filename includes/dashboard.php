@@ -2,12 +2,15 @@
 	global $current_user, $wpdb, $pmpro_reports;
 
 	krsort( $pmpro_reports );
+	//remove member  “Active Memberships Per Level” report until we're able to style it appropriately.
+	unset( $pmpro_reports['members_per_level'] );
 	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
 ?>
 <html>
 	<head>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<meta name="theme-color" content="#2997c8">
+	<meta name="robots" content="noindex">
 	<link rel="stylesheet" id="googleFonts-css" href="//fonts.googleapis.com/css?family=Lato:400,700&ver=4.3.1" type="text/css" media="all">
 	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<link rel="apple-touch-icon" href="/pmpro-reports-dashboard/icon-180.png" />
@@ -18,7 +21,7 @@
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js', dirname( __FILE__ ) ) );?>'></script>
 	<style>
 		body {background: #FAFAFA; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 16px; font-size: 1.6rem; line-height: 2.6rem; margin: 0; padding: 0; }
-		div {background: #FAFAFA; border-bottom: 5px solid #EEE; padding: 2rem .5rem; }
+		div[id^="pmpro_report"] {background: #FAFAFA; border-bottom: 5px solid #EEE; padding: 2rem .5rem; }
 		p {font-size: 10px; font-size: 1rem; margin: 0; padding: 0; }
 		p a {color: #AAA; text-transform: uppercase; }
 		table {border: 1px solid #EEE; border-collapse: separate; border-spacing: 0; width: 100%; }
@@ -33,7 +36,7 @@
 		.pmpro_report_tr_sub th, .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
 	</style>
 	</head>	
-	<body>	
+	<body <?php body_class() ?>>
 		<div class="ajax-reports-pwa">
 		</div>
 	</body>	
