@@ -133,16 +133,17 @@ add_filter( 'plugin_row_meta', 'pmprordb_plugin_row_meta', 10, 2 );
 
 /**
  * AJAX callback for the reports dashboard.
+ * @since TBD
  */
 function pmpro_reports_ajax( ) {
 	global $pmpro_reports;
-	$report_name = $_GET['report_name'];
+	$report_name = sanitize_text_field( $_GET['report_name'] );
 	//Bail if given name does not belong to a PMPro report
 	if( ! in_array( $report_name, array_keys( $pmpro_reports ) ) )  {
 		esc_html__('Invalid report name.', 'pmpro-reports-dashboard'); 
 		wp_die();
 	}
-	 call_user_func("pmpro_report_" . $report_name . "_widget");
+	 call_user_func("pmpro_report_" . esc_attr( $report_name ) . "_widget");
 	 wp_die();
 }
 
