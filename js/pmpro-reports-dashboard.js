@@ -7,8 +7,10 @@ if ('serviceWorker' in navigator) {
         jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text('Refresh All'));
         Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
       } else {
-        jQuery('.ajax-reports-pwa').append(jQuery('<div/>').text('Non logged users cannot see reports'), 
-        jQuery('<div/>').html('Please ' + '<a href="/login">' + ' login ' + '<a/>' + ' to view them.'));
+        jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').text('Non logged users cannot see reports'), 
+        jQuery('<h2/>').html('Please ' + '<a href="/login">' + ' login ' + '</a>' + ' to view them.'),
+        jQuery('.logo-wrapper').show());
+
       }
     }, function(err) {
       // registration failed :(
