@@ -34,9 +34,14 @@
 		.pmpro_report_tr_sub {display: table-row !important; }
 		.pmpro_report_tr button {background: none; border: none; color: #404040; font-family: 'Lato', sans-serif; font-weight: 400; font-size: 14px; font-size: 1.4rem; line-height: 2.4rem; padding: 0;}
 		.pmpro_report_tr_sub th, .pmpro_report_tr_sub td {font-size: 12px; line-height: 1.6rem; padding: .5rem; }
+		.preloader-wrapper {display:none; background: #FFF; height: 100%; justify-content:center; align-items:center;}
+		img.preloader {height: fit-content;}
 	</style>
 	</head>	
 	<body <?php body_class() ?>>
+		<div class="preloader-wrapper">
+			<img  class="preloader" src="<?php echo esc_url( plugins_url( 'images/loading.gif', dirname( __FILE__ ) ) );?>" alt="Loading..." />
+		</div>
 		<div class="ajax-reports-pwa">
 		</div>
 	</body>	

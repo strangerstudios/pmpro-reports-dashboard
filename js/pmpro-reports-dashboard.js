@@ -16,6 +16,7 @@ if ('serviceWorker' in navigator) {
     });
   });
   function fetchReports(name, title) {
+    jQuery('.preloader-wrapper').css('display', 'flex');
     jQuery.ajax({
       url: '/wp-admin/admin-ajax.php',
       type: 'GET',
@@ -27,24 +28,19 @@ if ('serviceWorker' in navigator) {
       success: function (data) {
         if(data) {
           if(jQuery('#pmpro_report_' + this.name).length == 0)  {
-            jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').html(this.title), data,
-            jQuery('<button/>')
-            .addClass('btn btn-primary refresh-button').text('Refresh')
-            .attr('data-title',this.title).attr('data-name', this.name));
+            jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').html(this.title), data);
           } else {
             jQuery('#pmpro_report_' + this.name).replaceWith(data);
           }
         }
       },error: function (xhr, ajaxOptions, thrownError) {
         jQuery('.ajax-reports-pwa').empty().append(xhr.responseText);
+      }, complete: function() {
+        jQuery('.preloader-wrapper').hide();
       }
     });
   }
   jQuery(document).ready(function($) {
-    $('.ajax-reports-pwa').on('click', '.refresh-button', function() {
-      fetchReports($(this).data('name'), $(this).data('title'));
-    });
-
     $('body').on('click', '.refresh-all',  function() {
       Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
     });
