@@ -2,8 +2,6 @@
 	global $current_user, $wpdb, $pmpro_reports;
 
 	krsort( $pmpro_reports );
-	//remove member  “Active Memberships Per Level” report until we're able to style it appropriately.
-	unset( $pmpro_reports['members_per_level'] );
 	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
 ?>
 <html>
