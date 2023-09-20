@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="<?php echo esc_url( plugins_url( 'css/style.css', dirname( __FILE__ ) ) );?>" type="text/css">
 	<script type="text/javascript">
 		const reports = <?php echo json_encode( $pmpro_reports );?>;
+		const loginUrl = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard' ) ); ?>";
 	</script>
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js', dirname( __FILE__ ) ) );?>'></script>
@@ -23,9 +24,12 @@
 		<div class="preloader-wrapper">
 			<img  class="preloader" src="<?php echo esc_url( plugins_url( 'images/loading.gif', dirname( __FILE__ ) ) );?>" alt="Loading..." />
 		</div>
+		<div class="preloader-wrapper logo">
+			<img  class="preloader" src="<?php echo esc_url( plugins_url( 'images/loading-logo.gif', dirname( __FILE__ ) ) );?>" alt="Loading..." />
+		</div>
 		<div class="ajax-reports-pwa">
 			<div class="logo-wrapper">
-				<img class="non-logged-logo" src="<?php echo esc_url( plugins_url( 'images/pmpro-tansparent.png', dirname( __FILE__ ) ) );?>" alt="Paid Memberships Pro" />
+				<img class="non-logged-logo" src="<?php echo esc_url( plugins_url( 'images/icon-750.png', dirname( __FILE__ ) ) );?>" alt="Paid Memberships Pro" />
 			</div>
 		</div>
 	</body>	
