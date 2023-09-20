@@ -131,3 +131,41 @@ function pmprordb_plugin_row_meta( $links, $file ) {
 	return $links;
 }
 add_filter( 'plugin_row_meta', 'pmprordb_plugin_row_meta', 10, 2 );
+
+
+/**
+ * AJAX callback for the reports dashboard.
+ * @since TBD
+ */
+function pmpro_reports_ajax( ) {
+	global $pmpro_reports;
+	$report_name = sanitize_text_field( $_GET['report_name'] );
+	//Bail if given name does not belong to a PMPro report
+	if( ! in_array( $report_name, array_keys( $pmpro_reports ) ) )  {
+		esc_html__( 'Invalid report name.', 'pmpro-reports-dashboard' ); 
+		wp_die();
+	}
+	if( $report_name != 'members_per_level' ) {
+		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_widget" );
+	} else {
+		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_page" );
+	}
+	 wp_die();
+}
+
+/**
+ * AJAX callback for the reports dashboard when user is not logged in.
+ * @since TBD
+ */
+function pmpro_reports_ajax_no_priv( ) {
+	echo '<div class="pmpro_message pmpro_error">';
+	echo esc_html__( 'Reports Page requires user is logged in to see it.', 'pmpro-reports-dashboard' );
+	echo '</div>';
+	wp_die();
+}
+
+add_action("wp_ajax_pmpro_reports_ajax", "pmpro_reports_ajax");
+add_action("wp_ajax_nopriv_pmpro_reports_ajax", "pmpro_reports_ajax_no_priv");
+
+
+
