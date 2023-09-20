@@ -73,11 +73,6 @@ add_filter( 'query_vars', 'pmprord_query_vars', 10, 1 );
  * Add shorter rewrite endpoint for the dashboard.
  */
 function pmprordb_add_rewrite_rule() {
-
-	if ( ! current_user_can( 'administrator' ) && ! current_user_can( 'pmpro_membership_manager' ) || ! current_user_can( 'pmpro_reports' ) ) {
-		return;
-	}
-
 	add_rewrite_rule( '^pmpro-reports-dashboard/sw.js$', 'index.php?pmpro_reports_action=sw', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/manifest.json$', 'index.php?pmpro_reports_action=manifest', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-180.png$', 'index.php?pmpro_reports_action=icon180', 'top' );
@@ -86,7 +81,7 @@ function pmprordb_add_rewrite_rule() {
 	
 	flush_rewrite_rules();
 }
-add_action( 'admin_init', 'pmprordb_add_rewrite_rule' );
+add_action( 'init', 'pmprordb_add_rewrite_rule' );
 
 /**
  * Keep WP from adding an ending slash
