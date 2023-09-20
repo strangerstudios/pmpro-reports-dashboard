@@ -99,6 +99,31 @@ function pmprordb_redirect_canonical_callback( $redirect_url, $requested_url ) {
 add_filter( 'redirect_canonical', 'pmprordb_redirect_canonical_callback', 100, 2 );
 
 /**
+ * Add links to the reports page in PMPro. /// move to page load rather on admin init.
+ */
+function pmprordb_add_links_report_page() {
+
+	// Only load on the reports main page.
+	if ( ! isset( $_REQUEST['page'] ) &&  $_REQUEST['page'] != 'pmpro-reports' ) {
+		return;
+	}
+
+	// We're viewing an individual report page, let's not show the link.
+	if ( isset( $_REQUEST['report'] ) && $_REQUEST['page'] == 'pmpro-reports' ) {
+		return;
+	}
+
+	?>
+	<script>
+		jQuery(document).ready(function() {
+			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="/pmpro-reports-dashboard" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
+		});
+	</script>
+	<?php
+}
+add_action( 'admin_head', 'pmprordb_add_links_report_page' );
+
+/**
  * Add links to the plugin action links
  *
  * @param $links (array) - The existing link array
