@@ -8,7 +8,7 @@ if ('serviceWorker' in navigator) {
         Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
       } else {
         jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').text('Non logged users cannot see reports'), 
-        jQuery('<h2/>').html('Please ' + '<a href="/login">' + ' login ' + '</a>' + ' to view them.'),
+        jQuery('<h2/>').html('Please ' + '<a href="' + loginUrl + '">' + ' login ' + '</a>' + ' to view them.'),
         jQuery('.logo-wrapper').show());
 
       }
