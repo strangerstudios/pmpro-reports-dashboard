@@ -22,10 +22,6 @@ function pmprord_controller() {
 		return;
 	}
 	
-	if ( ! current_user_can( 'administrator' ) && ! current_user_can( 'pmpro_membership_manager' ) || ! current_user_can( 'pmpro_reports' ) ) {
-		return;
-	}
-	
 	$action = get_query_var( 'pmpro_reports_action' );
 	
 	require_once ( ABSPATH . '/wp-admin/includes/file.php' );
