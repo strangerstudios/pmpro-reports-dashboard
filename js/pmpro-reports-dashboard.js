@@ -5,7 +5,7 @@ if ('serviceWorker' in navigator) {
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
       if(jQuery('body').hasClass('logged-in')) {
         jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text('Refresh All'));
-        Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
+        Object.entries(reports).forEach(([name, title]) => fetchReports(name, title, registration));
       } else {
         jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').text('Non logged users cannot see reports'), 
         jQuery('<h2/>').html('Please ' + '<a href="' + loginUrl + '">' + ' login ' + '</a>' + ' to view them.'),
@@ -17,8 +17,9 @@ if ('serviceWorker' in navigator) {
       console.log('ServiceWorker registration failed: ', err);
     });
   });
-  function fetchReports(name, title) {
-    jQuery('.preloader-wrapper').css('display', 'flex');
+  function fetchReports(name, title, registration) {
+    const $preloader = registration ? jQuery('.preloader-wrapper.logo') : jQuery('.preloader-wrapper');
+    $preloader.css('display', 'flex');
     jQuery.ajax({
       url: '/wp-admin/admin-ajax.php',
       type: 'GET',

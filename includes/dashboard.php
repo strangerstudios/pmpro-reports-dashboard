@@ -24,6 +24,9 @@
 		<div class="preloader-wrapper">
 			<img  class="preloader" src="<?php echo esc_url( plugins_url( 'images/loading.gif', dirname( __FILE__ ) ) );?>" alt="Loading..." />
 		</div>
+		<div class="preloader-wrapper logo">
+			<img  class="preloader" src="<?php echo esc_url( plugins_url( 'images/loading-logo.gif', dirname( __FILE__ ) ) );?>" alt="Loading..." />
+		</div>
 		<div class="ajax-reports-pwa">
 			<div class="logo-wrapper">
 				<img class="non-logged-logo" src="<?php echo esc_url( plugins_url( 'images/icon-750.png', dirname( __FILE__ ) ) );?>" alt="Paid Memberships Pro" />
