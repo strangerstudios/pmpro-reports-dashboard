@@ -103,7 +103,7 @@ add_filter( 'redirect_canonical', 'pmprordb_redirect_canonical_callback', 100, 2
 function pmprordb_add_links_report_page() {
 
 	// Only load on the reports main page.
-	if ( ! isset( $_REQUEST['page'] ) &&  $_REQUEST['page'] != 'pmpro-reports' ) {
+	if ( ! isset( $_REQUEST['page'] ) ||  $_REQUEST['page'] != 'pmpro-reports' ) {
 		return;
 	}
 

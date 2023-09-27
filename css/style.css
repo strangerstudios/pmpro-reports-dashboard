@@ -113,9 +113,16 @@ h2 {
 	align-items: center;
 }
 
-img.preloader {
-	height: fit-content;
+.preloader-wrapper img.preloader {
+	width: fit-content;
 }
+
+.preloader-wrapper.logo img.preloader {
+	width: 100%;
+}
+
+
+
 .refresh-all{    
     color: #2271b1;
     border-color: #2271b1;
