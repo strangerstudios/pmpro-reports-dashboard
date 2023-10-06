@@ -169,8 +169,8 @@ function pmpro_reports_ajax( ) {
 		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_widget" );
 	} else {
 		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_page" );
-	}
-	 wp_die();
+	}	
+	wp_die();
 }
 
 /**
@@ -179,13 +179,24 @@ function pmpro_reports_ajax( ) {
  */
 function pmpro_reports_ajax_no_priv( ) {
 	echo '<div class="pmpro_message pmpro_error">';
-	echo esc_html__( 'Reports Page requires user is logged in to see it.', 'pmpro-reports-dashboard' );
+	echo esc_html__( 'Log in to view the Mobile Reports Dashboard.', 'pmpro-reports-dashboard' );
 	echo '</div>';
 	wp_die();
 }
-
 add_action("wp_ajax_pmpro_reports_ajax", "pmpro_reports_ajax");
 add_action("wp_ajax_nopriv_pmpro_reports_ajax", "pmpro_reports_ajax_no_priv");
 
-
-
+/**
+ * AJAX callback to check if the user is logged in.
+ * @since TBD
+ */
+function pmpro_reports_check_login_ajax( ) {
+	if( is_user_logged_in() ) {
+		echo '1';
+	} else {
+		echo '0';
+	}
+	wp_die();
+}
+add_action( 'wp_ajax_pmpro_reports_check_login', 'pmpro_reports_check_login_ajax' );
+add_action( 'wp_ajax_nopriv_pmpro_reports_check_login', 'pmpro_reports_ajax_check_login' );
