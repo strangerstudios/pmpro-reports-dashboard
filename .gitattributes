@@ -4,5 +4,6 @@
 /.github export-ignore
 
 # Files
+pmpro-reports-dashboard-banner.png export-ignore
 .gitattributes export-ignore
 README.md export-ignore
