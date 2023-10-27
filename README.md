@@ -1,3 +1,5 @@
+![](pmpro-reports-dashboard-banner.png)
+
 # [Paid Memberships Pro - Reports Dashboard](https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/) #
 [comment]: # (Generate badges from shields.io, only works for .org plugins to get other stats etc. We'd have to create our own endpoints for Premium plugins)
 
