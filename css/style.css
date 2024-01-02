@@ -55,8 +55,8 @@ p {
 	padding: 0;
 }
 
-p a {
-	color: var(--pmpro--color--blue-darkest);
+a {
+	color: var(--pmpro--color--blue);
 }
 
 table {
@@ -141,6 +141,13 @@ h2 {
 
 .pmpro_report-button a:hover {
 	background: var(--pmpro--color--blue-darkest);
+}
+
+.spinner {
+	display: flex;
+	height: 48px;
+	margin: 0 auto;
+	width: 48px;
 }
 
 .preloader-wrapper {
