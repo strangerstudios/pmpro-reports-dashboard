@@ -159,7 +159,7 @@ function pmprordb_add_links_report_page() {
 	?>
 	<script>
 		jQuery(document).ready(function() {
-			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="/pmpro-reports-dashboard/" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
+			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="<?php echo esc_url( site_url( '/pmpro-reports-dashboard/' ) ); ?>" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
 		});
 	</script>
 	<?php
@@ -175,11 +175,24 @@ add_action( 'admin_head', 'pmprordb_add_links_report_page' );
  */
 function pmprordb_add_action_links( $links ) {
     $new_links = array(
-        '<a href="/pmpro-reports-dashboard/" title="' . esc_attr( __( 'View Reports', 'pmpro-reports-dashboard' ) ) . '">' . __( 'View Reports', 'pmpro-reports-dashboard' ) . '</a>',
+        '<a href="' . esc_url( site_url( '/pmpro-reports-dashboard/' ) ) . '" title="' . esc_attr( __( 'View Reports', 'pmpro-reports-dashboard' ) ) . '">' . __( 'View Reports', 'pmpro-reports-dashboard' ) . '</a>',
     );
     return array_merge( $new_links, $links );
 }
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'pmprordb_add_action_links' );
+
+/**
+ * Redirect the old ?pmpro_reports=true to the new /pmpro-reports-dashboard/ URL.
+ */
+function pmprordb_redirect_old_url() {
+	if ( ! isset( $_REQUEST['pmpro_reports'] ) ) {
+		return;
+	}
+	
+	wp_redirect( site_url( '/pmpro-reports-dashboard/' ) );
+	exit;
+}
+add_action( 'init', 'pmprordb_redirect_old_url' );
 
 /**
  * Add links to the plugin row meta
