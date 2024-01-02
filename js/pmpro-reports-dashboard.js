@@ -88,6 +88,12 @@ if ('serviceWorker' in navigator) {
 	}
 	jQuery(document).ready(function($) {
 		jQuery('body').on('click', '.refresh-all',	function() {
+			// Update the last updated date and time.
+			const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+			const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+			jQuery('.last-updated').text('Last Updated: ' + currentDate + ' at ' + currentTime + '. ');
+
+			// Update the reports.
 			Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
 		});
 	});
