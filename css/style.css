@@ -148,7 +148,6 @@ h2 {
 	background-color: var(--pmpro--color--blue-lightest);
 	height: 100%;
 	justify-content: center;
-	display: none;
 }
 
 .preloader-wrapper img.preloader {

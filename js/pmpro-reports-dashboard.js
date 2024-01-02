@@ -67,7 +67,8 @@ if ('serviceWorker' in navigator) {
       },error: function (xhr, ajaxOptions, thrownError) {
         console.log(xhr.responseText);
       }, complete: function() {
-        console.log('complete');
+        // Hide loading logo gif.
+        jQuery('.preloader-wrapper').hide();
       }
     });
   }
