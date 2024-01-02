@@ -10,16 +10,21 @@ if ('serviceWorker' in navigator) {
       if( urlParams.has('waitforlogin' ) ) {
         timetowait = 1000;
       }
-      setTimeout( function() { checkLoginAndLoadContent(registration); }, timetowait );      
+      setTimeout( function() { checkLoginAndLoadContent(); }, timetowait );      
             
     }, function(err) {
       // registration failed :(
       console.log('ServiceWorker registration failed: ', err);
     });
   });
-  function fetchReports(name, title, registration) {
-    const $preloader = registration ? jQuery('.preloader-wrapper.logo') : jQuery('.preloader-wrapper');
-    $preloader.css('display', 'flex');
+  function fetchReports(name, title) {
+    // Remove the old report box.
+    jQuery('#pmpro_report_' + name).remove();
+
+    // Add placeholder.
+    jQuery('.ajax-reports-pwa').append('<div id="pmpro_report_' + name + '"><h2>' + title + '</h2><img src="' + spinnerURL +'" class="spinner" /></div>');
+
+    // Load report via AJAX.
     jQuery.ajax({
       url: '/wp-admin/admin-ajax.php',
       type: 'GET',
@@ -30,38 +35,20 @@ if ('serviceWorker' in navigator) {
       name: name,
       success: function (data) {
         if(data) {
-          if(this.name != 'members_per_level') {
-            if(jQuery('#pmpro_report_' + this.name).length == 0)  {
-              jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').html(this.title), data);
-            } else {
-              jQuery('#pmpro_report_' + this.name).replaceWith(data);
-            }
-          } else {
-            const $membersResponse = jQuery('<div/>').append(jQuery(data));
-            const  $membersTable = $membersResponse.children('.pmpro_table_area');
-            $membersTable.find('a').each(function(index, item) {
-              jQuery(item).removeAttr('href');
-            });
-            if(jQuery('#pmpro_report_members_per_level').length == 0)  {
-              const $memberSpan = jQuery('<span/>').attr('id', 'pmpro_report_members_per_level');
-              const $detailsLink = jQuery('<a/>').addClass('button button-primary')
-                                                  .attr('aria-label', 'View the full Active Members Per Level report')
-                                                  .attr('href', '/wp-admin/admin.php?page=pmpro-reports&report=members_per_level')
-                                                  .text('details');
-              jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').text('Active Members Per Level'), $memberSpan.append($membersTable, jQuery('<p/>').addClass('pmpro_report-button').append($detailsLink)));
-            } else {
-              jQuery('#pmpro_report_members_per_level .pmpro_table_area').replaceWith($membersTable);
-            }
-          }
+          // Show report.
+          jQuery('#pmpro_report_' + this.name).empty()
+            .append('<h2>' + title + '</h2>')
+            .append(data);
         }
       },error: function (xhr, ajaxOptions, thrownError) {
-        jQuery('.ajax-reports-pwa').empty().append(xhr.responseText);
+        // Show error in rporet box.
+        jQuery('#pmpro_report_' + this.name).empty().append(xhr.responseText);
       }, complete: function() {
-        jQuery('.preloader-wrapper').hide();
+        // Nothing extra to do for now.
       }
     });
   }
-  function checkLoginAndLoadContent(registration) {     
+  function checkLoginAndLoadContent() {     
     // Check if logged in and load appropriate content.
     jQuery.ajax({
       url: '/wp-admin/admin-ajax.php',
@@ -71,7 +58,7 @@ if ('serviceWorker' in navigator) {
       success: function (data) {          
         if(data == '1') {
           jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text('Refresh All'));
-          Object.entries(reports).forEach(([name, title]) => fetchReports(name, title, registration));
+          Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
         } else {
           jQuery('.ajax-reports-pwa').append(jQuery('<h2/>').text('Non logged users cannot see reports'), 
           jQuery('<h2/>').html('Please ' + '<a href="' + loginUrl + '">' + ' login ' + '</a>' + ' to view them.'),
@@ -85,7 +72,7 @@ if ('serviceWorker' in navigator) {
     });
   }
   jQuery(document).ready(function($) {
-    $('body').on('click', '.refresh-all',  function() {
+    jQuery('body').on('click', '.refresh-all',  function() {
       Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
     });
   });
