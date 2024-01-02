@@ -7,9 +7,8 @@
 <html>
 	<head>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<meta name="theme-color" content="#2997c8">
+	<meta name="theme-color" content="#0C3D54">
 	<meta name="robots" content="noindex">
-	<link rel="stylesheet" id="googleFonts-css" href="//fonts.googleapis.com/css?family=Lato:400,700&ver=4.3.1" type="text/css" media="all">
 	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<link rel="apple-touch-icon" href="/pmpro-reports-dashboard/icon-180.png" />
 	<link rel="stylesheet" href="<?php echo esc_url( plugins_url( 'css/style.css', dirname( __FILE__ ) ) );?>" type="text/css">
