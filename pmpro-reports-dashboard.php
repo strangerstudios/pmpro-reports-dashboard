@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Paid Memberships Pro - Reports Dashboard Add On
+Plugin Name: Paid Memberships Pro - Mobile Reports Dashboard Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/
-Description: Responsive Membership Reports Dashboard for Administrator and Membership Manager Role.
+Description: Streamlined membership site reports dashboard designed for mobile and responsive screens.
 Version: .3.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com
@@ -38,15 +38,55 @@ function pmprord_controller() {
 			header('Content-Type: application/json');			
 			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/manifest.json' );
 			break;
+		case 'icon48':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-48.png' );
+			break;
+		case 'icon72':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-72.png' );
+			break;
+		case 'icon96':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-96.png' );
+			break;
+		case 'icon128':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-128.png' );
+			break;
+		case 'icon144':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-144.png' );
+			break;
 		case 'icon180':
 			// load the app icon
 			header('Content-Type: image/png');
 			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-180.png' );
 			break;
+		case 'icon192':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-192.png' );
+			break;
+		case 'icon512':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-512.png' );
+			break;
 		case 'icon750':
 			// load the app icon
 			header('Content-Type: image/png');
 			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-750.png' );
+			break;
+		case 'icon1024':
+			// load the app icon
+			header('Content-Type: image/png');
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-1024.png' );
 			break;
 		default:
 			include( 'includes/dashboard.php' );
@@ -71,8 +111,16 @@ add_filter( 'query_vars', 'pmprord_query_vars', 10, 1 );
 function pmprordb_add_rewrite_rule() {
 	add_rewrite_rule( '^pmpro-reports-dashboard/sw.js$', 'index.php?pmpro_reports_action=sw', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/manifest.json$', 'index.php?pmpro_reports_action=manifest', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-48.png$', 'index.php?pmpro_reports_action=icon48', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-72.png$', 'index.php?pmpro_reports_action=icon72', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-96.png$', 'index.php?pmpro_reports_action=icon96', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-128.png$', 'index.php?pmpro_reports_action=icon128', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-144.png$', 'index.php?pmpro_reports_action=icon144', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-180.png$', 'index.php?pmpro_reports_action=icon180', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-192.png$', 'index.php?pmpro_reports_action=icon192', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-512.png$', 'index.php?pmpro_reports_action=icon512', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-750.png$', 'index.php?pmpro_reports_action=icon750', 'top' );
+	add_rewrite_rule( '^pmpro-reports-dashboard/images/icon-1024.png$', 'index.php?pmpro_reports_action=icon1024', 'top' );
 	add_rewrite_rule( '^pmpro-reports-dashboard', 'index.php?pmpro_reports_action=dashboard', 'top' );
 	
 	flush_rewrite_rules();
@@ -111,7 +159,7 @@ function pmprordb_add_links_report_page() {
 	?>
 	<script>
 		jQuery(document).ready(function() {
-			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="/pmpro-reports-dashboard" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
+			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="/pmpro-reports-dashboard/" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
 		});
 	</script>
 	<?php
@@ -127,7 +175,7 @@ add_action( 'admin_head', 'pmprordb_add_links_report_page' );
  */
 function pmprordb_add_action_links( $links ) {
     $new_links = array(
-        '<a href="' . esc_url( add_query_arg( 'pmpro_reports', 'true', site_url() ) )  . '" title="' . esc_attr( __( 'View Reports', 'pmpro-reports-dashboard' ) ) . '">' . __( 'View Reports', 'pmpro-reports-dashboard' ) . '</a>',
+        '<a href="/pmpro-reports-dashboard/" title="' . esc_attr( __( 'View Reports', 'pmpro-reports-dashboard' ) ) . '">' . __( 'View Reports', 'pmpro-reports-dashboard' ) . '</a>',
     );
     return array_merge( $new_links, $links );
 }
@@ -151,7 +199,6 @@ function pmprordb_plugin_row_meta( $links, $file ) {
 	return $links;
 }
 add_filter( 'plugin_row_meta', 'pmprordb_plugin_row_meta', 10, 2 );
-
 
 /**
  * AJAX callback for the reports dashboard.
@@ -179,12 +226,12 @@ function pmpro_reports_ajax( ) {
  */
 function pmpro_reports_ajax_no_priv( ) {
 	echo '<div class="pmpro_message pmpro_error">';
-	echo esc_html__( 'Log in to view the Mobile Reports Dashboard.', 'pmpro-reports-dashboard' );
+	echo esc_html__( 'You must log in to view the mobile reports dashboard.', 'pmpro-reports-dashboard' );
 	echo '</div>';
 	wp_die();
 }
-add_action("wp_ajax_pmpro_reports_ajax", "pmpro_reports_ajax");
-add_action("wp_ajax_nopriv_pmpro_reports_ajax", "pmpro_reports_ajax_no_priv");
+add_action( 'wp_ajax_pmpro_reports_ajax', 'pmpro_reports_ajax' );
+add_action( 'wp_ajax_nopriv_pmpro_reports_ajax', 'pmpro_reports_ajax_no_priv' );
 
 /**
  * AJAX callback to check if the user is logged in.
