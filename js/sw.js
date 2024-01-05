@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-beta2';
+var CACHE_NAME = 'pmpro-reports-dashboard-v1-beta3';
 var urlsToCache = [
 	'/pmpro-reports-dashboard/',
 	'/pmpro-reports-dashboard/manifest.js',
@@ -6,6 +6,7 @@ var urlsToCache = [
 	'/wp-content/plugins/pmpro-reports-dashboard/js/pmpro-reports-dashboard.js'
 ];
 
+// Set up the cache.
 self.addEventListener('install', function(event) {
 	// Perform install steps
 	event.waitUntil(
@@ -17,6 +18,7 @@ self.addEventListener('install', function(event) {
 	);
 });
 
+// Cache and return requests.
 self.addEventListener('fetch', function(event) {
 	event.respondWith(
 		caches.match(event.request)
@@ -49,4 +51,17 @@ self.addEventListener('fetch', function(event) {
 				);
 			})
 		);
+});
+
+// Delete old caches.
+self.addEventListener('activate', function(event) {
+	event.waitUntil(
+		caches.keys().then(function(keys) {
+			console.log(keys);
+			return Promise.all(keys
+				.filter(key => key !== CACHE_NAME)
+				.map(key => caches.delete(key))
+			)
+		})
+	)
 });
