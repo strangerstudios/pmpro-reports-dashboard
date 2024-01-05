@@ -63,10 +63,12 @@ if ('serviceWorker' in navigator) {
 					const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
 					// Append the last updated date
-					jQuery('.ajax-reports-pwa').append(jQuery('<span/>').addClass('last-updated').text('Last Updated: ' + currentDate + ' at ' + currentTime + '. '));
+					jQuery('.ajax-reports-pwa').append(jQuery('<span/>').addClass('last-updated').text(localized_strings.last_updated
+						.replace('%s', currentDate)
+						.replace('%s', currentTime)));
 
 					// Append the refresh button
-					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text('Refresh'));
+					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
 
 					// Show spinner.
 					jQuery('.ajax-reports-pwa').append(jQuery('<img/>').addClass('preloader-wrapper fetching-reports').attr('src', spinnerURL));
@@ -96,8 +98,8 @@ if ('serviceWorker' in navigator) {
 					Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
 				} else {
 					jQuery('.ajax-reports-pwa').append(
-						jQuery('<p/>').text('You must be logged in to view reports.'), 
-						jQuery('<p/>').html('<a href="' + loginUrl + '">' + 'Log in now' + '</a>' + ' to access this dashboard.'),
+						jQuery('<p/>').text(localized_strings.must_be_logged_in), 
+						jQuery('<p/>').html('<a href="' + loginUrl + '">' + localized_strings.login_to_access + '</a>'),
 					);
 				}
 			},error: function (xhr, ajaxOptions, thrownError) {
@@ -116,7 +118,9 @@ if ('serviceWorker' in navigator) {
 			// Update the last updated date and time.
 			const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 			const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-			jQuery('.last-updated').text('Last Updated: ' + currentDate + ' at ' + currentTime + '. ');
+			jQuery('.last-updated').text(localized_strings.last_updated
+				.replace('%s', currentDate)
+				.replace('%s', currentTime));
 
 			// Update the reports.
 			Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
