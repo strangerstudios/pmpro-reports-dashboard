@@ -225,11 +225,7 @@ function pmpro_reports_ajax( ) {
 		esc_html__( 'Invalid report name.', 'pmpro-reports-dashboard' ); 
 		wp_die();
 	}
-	if( $report_name != 'members_per_level' ) {
-		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_widget" );
-	} else {
-		call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_page" );
-	}	
+	call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_widget" );
 	wp_die();
 }
 add_action( 'wp_ajax_pmpro_reports_ajax', 'pmpro_reports_ajax' );

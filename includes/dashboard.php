@@ -18,6 +18,7 @@
 		spinnerImage.src = spinnerURL;
 	</script>
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
+	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/corechart.js?ver=' . VERSION, dirname( __FILE__ ) ) );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js?ver=' . VERSION, dirname( __FILE__ ) ) );?>'></script>
 	</head>	
 	<body <?php body_class() ?>>
