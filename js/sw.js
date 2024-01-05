@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-beta4';
+var CACHE_NAME = 'pmpro-reports-dashboard-v1-beta5';
 var urlsToCache = [
 	'/pmpro-reports-dashboard/',
 	'/pmpro-reports-dashboard/manifest.js',
@@ -57,7 +57,6 @@ self.addEventListener('fetch', function(event) {
 self.addEventListener('activate', function(event) {
 	event.waitUntil(
 		caches.keys().then(function(keys) {
-			console.log(keys);
 			return Promise.all(keys
 				.filter(key => key !== CACHE_NAME)
 				.map(key => caches.delete(key))

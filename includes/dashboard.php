@@ -1,9 +1,5 @@
 <?php
-	global $current_user, $wpdb, $pmpro_reports;
-
-	define( 'VERSION', 'beta4' );
-	krsort( $pmpro_reports );
-	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
+	define( 'VERSION', 'beta5' );
 ?>
 <html>
 	<head>
@@ -13,11 +9,11 @@
 	<link rel="manifest" href="/pmpro-reports-dashboard/manifest.json">
 	<link rel="stylesheet" href="<?php echo esc_url( plugins_url( 'css/style.css?ver=' . VERSION, dirname( __FILE__ ) ) );?>" type="text/css">
 	<script type="text/javascript">
-		const reports = <?php echo json_encode( $pmpro_reports );?>;
+		// Set up some global variables for the AJAX code.
 		const loginUrl = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard/?waitforlogin=1' ) ); ?>";
-
+		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>";
+		
 		// Preload the spinner.
-		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>"; // AJAX code uses this URL too.
 		var spinnerImage = new Image();
 		spinnerImage.src = spinnerURL;
 	</script>

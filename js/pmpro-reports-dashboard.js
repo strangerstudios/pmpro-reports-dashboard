@@ -1,4 +1,5 @@
 if ('serviceWorker' in navigator) {
+	var reports = false;
 	window.addEventListener('load', function() {
 		navigator.serviceWorker.register('/pmpro-reports-dashboard/sw.js').then(function(registration) {
 			// Registration was successful
@@ -26,6 +27,7 @@ if ('serviceWorker' in navigator) {
 
 		// Load report via AJAX.
 		jQuery.ajax({
+			async: true,
 			url: '/wp-admin/admin-ajax.php',
 			type: 'GET',
 			data: { 'report_name': name, 'action':'pmpro_reports_ajax'},
@@ -43,14 +45,13 @@ if ('serviceWorker' in navigator) {
 			},error: function (xhr, ajaxOptions, thrownError) {
 				// Show error in report box.
 				jQuery('#pmpro_report_' + this.name).empty().append(xhr.responseText);
-			}, complete: function() {
-				// Nothing extra to do for now.
 			}
 		});
 	}
-	function checkLoginAndLoadContent() {		 
+	function checkLoginAndLoadContent() {
 		// Check if logged in and load appropriate content.
 		jQuery.ajax({
+			async: false,
 			url: '/wp-admin/admin-ajax.php',
 			type: 'GET',
 			data: { 'action':'pmpro_reports_check_login'},
@@ -67,7 +68,31 @@ if ('serviceWorker' in navigator) {
 					// Append the refresh button
 					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text('Refresh'));
 
-					// Append the reports
+					// Show spinner.
+					jQuery('.ajax-reports-pwa').append(jQuery('<img/>').addClass('preloader-wrapper fetching-reports').attr('src', spinnerURL));
+
+					// Get list of reports.
+					if ( reports === false ) {
+						jQuery.ajax({
+							async: false,
+							url: '/wp-admin/admin-ajax.php',
+							type: 'GET',
+							data: { 'action':'pmpro_reports_list'},
+							dataType: 'json',
+							cache: false,
+							success: function (data) {
+								reports = data;
+							},error: function (xhr, ajaxOptions, thrownError) {
+								// Show error in report box.
+								jQuery('#pmpro_report_' + this.name).empty().append(xhr.responseText);
+								reports = [];
+							}
+						});
+					}
+
+					// Remove spinner.
+					jQuery('.fetching-reports').remove();
+
 					Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
 				} else {
 					jQuery('.ajax-reports-pwa').append(

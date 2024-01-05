@@ -214,8 +214,8 @@ function pmprordb_plugin_row_meta( $links, $file ) {
 add_filter( 'plugin_row_meta', 'pmprordb_plugin_row_meta', 10, 2 );
 
 /**
- * AJAX callback for the reports dashboard.
- * @since TBD
+ * AJAX callback to get the widget for a single report.
+ * @since 1.0
  */
 function pmpro_reports_ajax( ) {
 	global $pmpro_reports;
@@ -232,6 +232,7 @@ function pmpro_reports_ajax( ) {
 	}	
 	wp_die();
 }
+add_action( 'wp_ajax_pmpro_reports_ajax', 'pmpro_reports_ajax' );
 
 /**
  * AJAX callback for the reports dashboard when user is not logged in.
@@ -243,7 +244,6 @@ function pmpro_reports_ajax_no_priv( ) {
 	echo '</div>';
 	wp_die();
 }
-add_action( 'wp_ajax_pmpro_reports_ajax', 'pmpro_reports_ajax' );
 add_action( 'wp_ajax_nopriv_pmpro_reports_ajax', 'pmpro_reports_ajax_no_priv' );
 
 /**
@@ -260,3 +260,14 @@ function pmpro_reports_check_login_ajax( ) {
 }
 add_action( 'wp_ajax_pmpro_reports_check_login', 'pmpro_reports_check_login_ajax' );
 add_action( 'wp_ajax_nopriv_pmpro_reports_check_login', 'pmpro_reports_ajax_check_login' );
+
+/**
+ * AJAX callback to get a list of reports.
+ */
+function pmpro_reports_list_ajax( ) {
+	global $pmpro_reports;
+	krsort( $pmpro_reports );
+	echo json_encode( apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports ) );
+	wp_die();
+}
+add_action( 'wp_ajax_pmpro_reports_list', 'pmpro_reports_list_ajax' );
