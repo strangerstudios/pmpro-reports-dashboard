@@ -33,7 +33,7 @@
 			<img alt="<?php esc_attr_e( 'Paid Memberships Pro', 'pmpro-reports-dashboard' ); ?>" src="<?php echo esc_url( plugins_url( 'images/icon-white-transparent.png?ver=' . VERSION, dirname( __FILE__ ) ) );?>" />
 			<?php
 				// Show a link back to the site.
-				printf( '<a href="%s" class="admin-link">%s</a>', esc_url( site_url() ), esc_attr__( 'Back to site', 'pmpro-reports-dashboard' ) );
+				printf( '<a href="%s" class="admin-link">%s</a>', esc_url( admin_url() ), esc_attr__( 'Back to site', 'pmpro-reports-dashboard' ) );
 			?>
 		</div>
 	
