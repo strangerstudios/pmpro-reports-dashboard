@@ -15,18 +15,18 @@
 	<script type="text/javascript">
 		const reports = <?php echo json_encode( $pmpro_reports );?>;
 		const loginUrl = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard/?waitforlogin=1' ) ); ?>";
-		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif', dirname( __FILE__ ) ) );?>";
+		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>";
 	</script>
 	<script type='text/javascript' src='<?php echo esc_url( includes_url( 'js/jquery/jquery.js') );?>'></script>
 	<script type='text/javascript' src='<?php echo esc_url( plugins_url( 'js/pmpro-reports-dashboard.js?ver=' . VERSION, dirname( __FILE__ ) ) );?>'></script>
 	</head>	
 	<body <?php body_class() ?>>
 		<div class="preloader-wrapper logo">
-			<img class="preloader" alt="<?php esc_attr_e( 'Loading reports dashboard...', 'pmpro-reports-dashboard' ); ?>" src="<?php echo esc_url( plugins_url( 'images/loading-logo.gif', dirname( __FILE__ ) ) );?>" />
+			<img class="preloader" alt="<?php esc_attr_e( 'Loading reports dashboard...', 'pmpro-reports-dashboard' ); ?>" src="<?php echo esc_url( plugins_url( 'images/loading-logo.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>" />
 		</div>
 
 		<div class="header" style="display: none;">
-			<img alt="<?php esc_attr_e( 'Paid Memberships Pro', 'pmpro-reports-dashboard' ); ?>" src="<?php echo esc_url( plugins_url( 'images/icon-white-transparent.png', dirname( __FILE__ ) ) );?>" />
+			<img alt="<?php esc_attr_e( 'Paid Memberships Pro', 'pmpro-reports-dashboard' ); ?>" src="<?php echo esc_url( plugins_url( 'images/icon-white-transparent.png?ver=' . VERSION, dirname( __FILE__ ) ) );?>" />
 			<?php
 				// Show a link back to the site.
 				printf( '<a href="%s" class="admin-link">%s</a>', esc_url( site_url() ), esc_attr__( 'Back to site', 'pmpro-reports-dashboard' ) );
