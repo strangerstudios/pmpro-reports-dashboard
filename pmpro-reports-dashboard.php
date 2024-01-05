@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Mobile Reports Dashboard Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/
 Description: Streamlined membership site reports dashboard designed for mobile and responsive screens.
-Version: .3.1
+Version: 1.0
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com
 Text Domain: pmpro-reports-dashboard
@@ -219,8 +219,15 @@ add_filter( 'plugin_row_meta', 'pmprordb_plugin_row_meta', 10, 2 );
  */
 function pmpro_reports_ajax( ) {
 	global $pmpro_reports;
+	
+	// Require admin or reports cap to view reports.
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'pmpro_reports' ) ) {
+		esc_html_e( 'You do not have permissions to perform this action.', 'pmpro-reports-dashboard' );
+		wp_die();
+	}
+	
 	$report_name = sanitize_text_field( $_GET['report_name'] );
-	//Bail if given name does not belong to a PMPro report
+	// Bail if given name does not belong to a PMPro report.
 	if( ! in_array( $report_name, array_keys( $pmpro_reports ) ) )  {
 		esc_html__( 'Invalid report name.', 'pmpro-reports-dashboard' ); 
 		wp_die();
@@ -232,7 +239,7 @@ add_action( 'wp_ajax_pmpro_reports_ajax', 'pmpro_reports_ajax' );
 
 /**
  * AJAX callback for the reports dashboard when user is not logged in.
- * @since TBD
+ * @since 1.0
  */
 function pmpro_reports_ajax_no_priv( ) {
 	echo '<div class="pmpro_message pmpro_error">';
@@ -244,7 +251,7 @@ add_action( 'wp_ajax_nopriv_pmpro_reports_ajax', 'pmpro_reports_ajax_no_priv' );
 
 /**
  * AJAX callback to check if the user is logged in.
- * @since TBD
+ * @since 1.0
  */
 function pmpro_reports_check_login_ajax( ) {
 	if( is_user_logged_in() ) {
@@ -262,6 +269,13 @@ add_action( 'wp_ajax_nopriv_pmpro_reports_check_login', 'pmpro_reports_ajax_chec
  */
 function pmpro_reports_list_ajax( ) {
 	global $pmpro_reports;
+	
+	// Require admin or reports cap to view reports.
+	if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'pmpro_reports' ) ) {
+		wp_die('-1'); // Send -1 to tell JS to redirect away.
+	}
+	
+	// Sort, filter, and return reports.
 	krsort( $pmpro_reports );
 	echo json_encode( apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports ) );
 	wp_die();

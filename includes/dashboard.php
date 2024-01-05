@@ -1,5 +1,5 @@
 <?php
-	define( 'VERSION', 'beta5' );
+	define( 'VERSION', 'rc1' );
 ?>
 <html>
 	<head>
@@ -10,7 +10,8 @@
 	<link rel="stylesheet" href="<?php echo esc_url( plugins_url( 'css/style.css?ver=' . VERSION, dirname( __FILE__ ) ) );?>" type="text/css">
 	<script type="text/javascript">
 		// Set up some global variables for the JS.
-		const loginUrl = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard/?waitforlogin=1' ) ); ?>";
+		const homeURL = "<?php echo esc_url( home_url() ); ?>";
+		const loginURL = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard/?waitforlogin=1' ) ); ?>";
 		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>";
 		
 		// Preload the spinner.
@@ -21,6 +22,7 @@
 		var localized_strings = {
 			'last_updated': <?php echo json_encode( esc_html__( 'Last Updated: %s at %s.', 'pmpro-reports-dashboard' ) ); ?>,
 			'refresh': <?php echo json_encode( esc_html__( 'Refresh', 'pmpro-reports-dashboard' ) ); ?>,
+			'no_permission': <?php echo json_encode( esc_html__( 'You do not have permission to view this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
 			'must_be_logged_in': <?php echo json_encode( esc_html__( 'You must be logged in to view reports.', 'pmpro-reports-dashboard' ) ); ?>,
 			'login_to_access': <?php echo json_encode( esc_html__( 'Log in now to access this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
 		}

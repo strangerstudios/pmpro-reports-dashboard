@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-beta5';
+var CACHE_NAME = 'pmpro-reports-dashboard-v1-rc1';
 var urlsToCache = [
 	'/pmpro-reports-dashboard/',
 	'/pmpro-reports-dashboard/manifest.js',

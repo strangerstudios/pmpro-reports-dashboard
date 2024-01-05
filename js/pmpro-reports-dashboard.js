@@ -65,7 +65,7 @@ if ('serviceWorker' in navigator) {
 					// Append the last updated date
 					jQuery('.ajax-reports-pwa').append(jQuery('<span/>').addClass('last-updated').text(localized_strings.last_updated
 						.replace('%s', currentDate)
-						.replace('%s', currentTime)));
+						.replace('%s', currentTime) + ' '));
 
 					// Append the refresh button
 					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
@@ -83,10 +83,17 @@ if ('serviceWorker' in navigator) {
 							dataType: 'json',
 							cache: false,
 							success: function (data) {
+								// A -1 response means the user doesn't have permissions to view reports.
+								if(data == '-1') {
+									jQuery('.ajax-reports-pwa').empty().append(jQuery('<p/>').text(localized_strings.no_permission));
+									window.location.replace(homeURL);
+								}
+								
+								// Update the reports.
 								reports = data;
 							},error: function (xhr, ajaxOptions, thrownError) {
 								// Show error in report box.
-								jQuery('#pmpro_report_' + this.name).empty().append(xhr.responseText);
+								jQuery('.ajax-reports-pwa').append(xhr.responseText);
 								reports = [];
 							}
 						});
@@ -99,7 +106,7 @@ if ('serviceWorker' in navigator) {
 				} else {
 					jQuery('.ajax-reports-pwa').append(
 						jQuery('<p/>').text(localized_strings.must_be_logged_in), 
-						jQuery('<p/>').html('<a href="' + loginUrl + '">' + localized_strings.login_to_access + '</a>'),
+						jQuery('<p/>').html('<a href="' + loginURL + '">' + localized_strings.login_to_access + '</a>'),
 					);
 				}
 			},error: function (xhr, ajaxOptions, thrownError) {
@@ -120,7 +127,7 @@ if ('serviceWorker' in navigator) {
 			const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 			jQuery('.last-updated').text(localized_strings.last_updated
 				.replace('%s', currentDate)
-				.replace('%s', currentTime));
+				.replace('%s', currentTime) + ' ');
 
 			// Update the reports.
 			Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
