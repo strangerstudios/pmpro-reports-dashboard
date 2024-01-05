@@ -1,7 +1,7 @@
 <?php
 	global $current_user, $wpdb, $pmpro_reports;
 
-	define( 'VERSION', 'beta2' );
+	define( 'VERSION', 'beta4' );
 	krsort( $pmpro_reports );
 	$pmpro_reports = apply_filters( 'pmpro_reports_dashboard_reports', $pmpro_reports );
 ?>
