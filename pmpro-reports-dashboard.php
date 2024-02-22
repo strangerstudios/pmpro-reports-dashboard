@@ -159,7 +159,7 @@ function pmprordb_add_links_report_page() {
 	?>
 	<script>
 		jQuery(document).ready(function() {
-			jQuery('.memberships_page_pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="<?php echo esc_url( site_url( '/pmpro-reports-dashboard/' ) ); ?>" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
+			jQuery('.memberships_page_pmpro-reports .pmpro_admin-pmpro-reports h1').append(' <a id="pmprordb-view-mobile" class="page-title-action" href="<?php echo esc_url( site_url( '/pmpro-reports-dashboard/' ) ); ?>" target="_blank"><?php echo esc_html__( 'View Mobile Reports', 'pmpro-reports-dashboard' ); ?></a>');
 		});
 	</script>
 	<?php
