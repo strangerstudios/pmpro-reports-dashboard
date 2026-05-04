@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Mobile Reports Dashboard Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/responsive-reports-dashboard/
 Description: Streamlined membership site reports dashboard designed for mobile and responsive screens.
-Version: 1.0
+Version: 1.0.1
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com
 Text Domain: pmpro-reports-dashboard
