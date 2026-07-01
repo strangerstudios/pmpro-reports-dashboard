@@ -1,5 +1,5 @@
 <?php
-	define( 'VERSION', 'rc1' );
+	define( 'VERSION', 'rc2' );
 ?>
 <html>
 	<head>
@@ -25,7 +25,6 @@
 			'no_permission': <?php echo json_encode( esc_html__( 'You do not have permission to view this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
 			'must_be_logged_in': <?php echo json_encode( esc_html__( 'You must be logged in to view reports.', 'pmpro-reports-dashboard' ) ); ?>,
 			'login_to_access': <?php echo json_encode( esc_html__( 'Log in now to access this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
-			'showing_saved_data': <?php echo json_encode( esc_html__( 'Showing saved data from %s at %s. Updating…', 'pmpro-reports-dashboard' ) ); ?>,
 			'refresh_failed': <?php echo json_encode( esc_html__( "Couldn't refresh, showing last saved data.", 'pmpro-reports-dashboard' ) ); ?>,
 		}
 
@@ -110,9 +109,11 @@
 					return false;
 				}
 
+				// Same "Last Updated:" wording as the loaded state - the refresh button's
+				// dot is enough to signal that this is being refreshed in the background.
 				var savedAt = new Date( cache.savedAt || Date.now() );
 				container.innerHTML = '<span class="last-updated">' +
-					this.escapeHTML( this.formatDate( savedAt, localized_strings.showing_saved_data ) ) +
+					this.escapeHTML( this.formatDate( savedAt, localized_strings.last_updated ) + ' ' ) +
 					'</span>' + html;
 
 				var preloader = document.querySelector( '.preloader-wrapper' );

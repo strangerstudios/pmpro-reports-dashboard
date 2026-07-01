@@ -253,8 +253,10 @@ button.refresh-all.pmprord-syncing::after {
 	position: relative;
 }
 
-[id^="pmpro_report_"].pmprord-updating {
-	opacity: 0.8;
+/* Dim everything but the heading (every widget wraps its content in one element
+   right after the <h2>) so the title stays readable while the data looks stale. */
+[id^="pmpro_report_"].pmprord-updating > :not(h2) {
+	opacity: 0.6;
 	transition: opacity 0.2s ease;
 }
 
