@@ -226,24 +226,36 @@ button.refresh-all {
 /**
  * Instant-load cache indicators (localStorage boot cache)
  */
-.pmprord-sync-badge {
-	align-items: center;
-	display: inline-flex;
-	gap: 6px;
+.last-updated {
+	margin-right: var(--pmpro--spacing--small);
 }
 
-.pmprord-sync-badge.pmprord-syncing::after {
-	animation: pmprord-pulse 1s ease-in-out infinite;
+/* The dot's space is always reserved (opacity toggles, nothing is added/removed),
+   so the refresh button never shifts when syncing starts or ends. */
+button.refresh-all::after {
 	background: var(--pmpro--color--blue);
 	border-radius: 50%;
 	content: "";
 	display: inline-block;
 	height: 8px;
+	margin-left: 6px;
+	opacity: 0;
+	vertical-align: middle;
 	width: 8px;
+}
+
+button.refresh-all.pmprord-syncing::after {
+	animation: pmprord-pulse 1s ease-in-out infinite;
+	opacity: 1;
 }
 
 [id^="pmpro_report_"] {
 	position: relative;
+}
+
+[id^="pmpro_report_"].pmprord-updating {
+	opacity: 0.8;
+	transition: opacity 0.2s ease;
 }
 
 [id^="pmpro_report_"].pmprord-updating::before {

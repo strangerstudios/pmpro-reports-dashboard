@@ -111,7 +111,7 @@
 				}
 
 				var savedAt = new Date( cache.savedAt || Date.now() );
-				container.innerHTML = '<span class="last-updated pmprord-sync-badge pmprord-syncing">' +
+				container.innerHTML = '<span class="last-updated">' +
 					this.escapeHTML( this.formatDate( savedAt, localized_strings.showing_saved_data ) ) +
 					'</span>' + html;
 

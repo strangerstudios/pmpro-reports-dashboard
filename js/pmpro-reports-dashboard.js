@@ -27,9 +27,11 @@ if ('serviceWorker' in navigator) {
 		PMPRORD.writeCache(cache);
 	}
 
-	// Marks the last-updated badge as syncing (or done) without touching report content.
+	// Marks the refresh button as syncing (or done) without touching report content.
+	// The dot lives on the button (to its right) rather than the badge text, and its
+	// space is always reserved in CSS, so nothing shifts when syncing starts or ends.
 	function pmprordSetSyncing(isSyncing) {
-		jQuery('.pmprord-sync-badge').toggleClass('pmprord-syncing', isSyncing);
+		jQuery('.refresh-all').toggleClass('pmprord-syncing', isSyncing);
 	}
 
 	function pmprordLoadContentAfterDelay() {
@@ -121,15 +123,19 @@ if ('serviceWorker' in navigator) {
 					var badgeText = PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' ';
 					var $badge = jQuery('.ajax-reports-pwa .last-updated');
 					if ($badge.length) {
-						$badge.addClass('pmprord-sync-badge pmprord-syncing').text(badgeText);
+						$badge.text(badgeText);
 					} else {
-						jQuery('.ajax-reports-pwa').prepend(jQuery('<span/>').addClass('last-updated pmprord-sync-badge pmprord-syncing').text(badgeText));
+						jQuery('.ajax-reports-pwa').prepend(jQuery('<span/>').addClass('last-updated').text(badgeText));
 					}
 
-					// Add the refresh button right after the badge, unless it's already there.
-					if (! jQuery('.ajax-reports-pwa .refresh-all').length) {
-						jQuery('.ajax-reports-pwa .last-updated').after(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
+					// Add the refresh button right after the badge, unless it's already there,
+					// and flag it as syncing until all reports finish loading.
+					var $refreshBtn = jQuery('.ajax-reports-pwa .refresh-all');
+					if (! $refreshBtn.length) {
+						$refreshBtn = jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh);
+						jQuery('.ajax-reports-pwa .last-updated').after($refreshBtn);
 					}
+					$refreshBtn.addClass('pmprord-syncing');
 
 					// Get list of reports.
 					if ( reports === false ) {
@@ -199,8 +205,9 @@ if ('serviceWorker' in navigator) {
 	}
 	jQuery(document).ready(function($) {
 		jQuery('body').on('click', '.refresh-all',	function() {
-			// Update the last updated date and time, and flag it as syncing again.
-			jQuery('.last-updated').addClass('pmprord-sync-badge pmprord-syncing').text(PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' ');
+			// Update the last updated date and time, and flag this button as syncing again.
+			jQuery('.last-updated').text(PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' ');
+			jQuery(this).addClass('pmprord-syncing');
 
 			// Update the reports.
 			pmprordPending = Object.keys(reports).length;
