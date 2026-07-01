@@ -262,7 +262,7 @@ function pmpro_reports_check_login_ajax( ) {
 	wp_die();
 }
 add_action( 'wp_ajax_pmpro_reports_check_login', 'pmpro_reports_check_login_ajax' );
-add_action( 'wp_ajax_nopriv_pmpro_reports_check_login', 'pmpro_reports_ajax_check_login' );
+add_action( 'wp_ajax_nopriv_pmpro_reports_check_login', 'pmpro_reports_check_login_ajax' );
 
 /**
  * AJAX callback to get a list of reports.

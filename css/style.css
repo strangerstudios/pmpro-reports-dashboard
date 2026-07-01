@@ -222,3 +222,52 @@ button.refresh-all {
 .pmpro_report-button a:hover {
 	background: var(--pmpro--color--blue-darkest);
 }
+
+/**
+ * Instant-load cache indicators (localStorage boot cache)
+ */
+.pmprord-sync-badge {
+	align-items: center;
+	display: inline-flex;
+	gap: 6px;
+}
+
+.pmprord-sync-badge.pmprord-syncing::after {
+	animation: pmprord-pulse 1s ease-in-out infinite;
+	background: var(--pmpro--color--blue);
+	border-radius: 50%;
+	content: "";
+	display: inline-block;
+	height: 8px;
+	width: 8px;
+}
+
+[id^="pmpro_report_"] {
+	position: relative;
+}
+
+[id^="pmpro_report_"].pmprord-updating::before {
+	animation: pmprord-pulse 1s ease-in-out infinite;
+	background: var(--pmpro--color--blue);
+	border-radius: 50%;
+	content: "";
+	height: 10px;
+	position: absolute;
+	right: 0;
+	top: var(--pmpro--spacing--large);
+	width: 10px;
+}
+
+.pmprord-refresh-error {
+	color: var(--pmpro--color--alert-text);
+	font-size: 13px;
+}
+
+@keyframes pmprord-pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.25;
+	}
+}
