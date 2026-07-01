@@ -115,13 +115,21 @@ if ('serviceWorker' in navigator) {
 			cache: false,
 			success: function (data) {
 				if(data == '1') {
-					// Remove any cached-data badge left by the boot script so we don't end up
-					// with two "Last Updated" lines, then show a fresh one flagged as syncing.
-					jQuery('.ajax-reports-pwa .last-updated').remove();
-					jQuery('.ajax-reports-pwa').append(jQuery('<span/>').addClass('last-updated pmprord-sync-badge pmprord-syncing').text(PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' '));
+					// Update the badge left by the boot script in place (if there is one)
+					// instead of removing + re-appending it - appending would drop it to the
+					// bottom of the container, after the cached report boxes already there.
+					var badgeText = PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' ';
+					var $badge = jQuery('.ajax-reports-pwa .last-updated');
+					if ($badge.length) {
+						$badge.addClass('pmprord-sync-badge pmprord-syncing').text(badgeText);
+					} else {
+						jQuery('.ajax-reports-pwa').prepend(jQuery('<span/>').addClass('last-updated pmprord-sync-badge pmprord-syncing').text(badgeText));
+					}
 
-					// Append the refresh button
-					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
+					// Add the refresh button right after the badge, unless it's already there.
+					if (! jQuery('.ajax-reports-pwa .refresh-all').length) {
+						jQuery('.ajax-reports-pwa .last-updated').after(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
+					}
 
 					// Get list of reports.
 					if ( reports === false ) {
