@@ -56,6 +56,22 @@ if ('serviceWorker' in navigator) {
 		return wrapper.textContent.replace(/\s+/g, '') === '';
 	}
 
+	// Puts report boxes back in the server's order (registration order, plus whatever
+	// pmpro_reports_dashboard_reports filters have done to it - hiding some, moving
+	// others). Needed because a cached box keeps whatever DOM position it was first
+	// painted in, and a never-cached box (e.g. one with a <script>) just gets appended
+	// wherever fetchReports() happens to run it - neither respects the current order
+	// on their own, so this runs once everything has settled to put them back in line.
+	function pmprordReorderReports() {
+		var $container = jQuery('.ajax-reports-pwa');
+		Object.keys(reports).forEach(function (name) {
+			var box = document.getElementById('pmpro_report_' + name);
+			if (box) {
+				$container.append(box);
+			}
+		});
+	}
+
 	// Shows a single "View All Reports" link at the bottom once any widgets have been
 	// skipped for having no content, and removes it again if that's no longer the case
 	// (e.g. after a refresh brings real data back).
@@ -156,8 +172,11 @@ if ('serviceWorker' in navigator) {
 				// Floor at zero so an overlapping refresh (see the click handler below)
 				// can't drift the shared counter negative and desync the indicator.
 				pmprordPending = Math.max(0, pmprordPending - 1);
-				pmprordUpdateViewAllLink();
 				if (pmprordPending <= 0) {
+					// Only reorder/re-check once everything has settled - doing it after
+					// every single fetch would just repeat the same work N times.
+					pmprordReorderReports();
+					pmprordUpdateViewAllLink();
 					pmprordSetSyncing(false);
 				}
 			}
