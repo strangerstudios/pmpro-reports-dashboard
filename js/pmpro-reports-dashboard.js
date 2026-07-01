@@ -100,7 +100,9 @@ if ('serviceWorker' in navigator) {
 				}
 			},
 			complete: function () {
-				pmprordPending--;
+				// Floor at zero so an overlapping refresh (see the click handler below)
+				// can't drift the shared counter negative and desync the indicator.
+				pmprordPending = Math.max(0, pmprordPending - 1);
 				if (pmprordPending <= 0) {
 					pmprordSetSyncing(false);
 				}
@@ -181,10 +183,12 @@ if ('serviceWorker' in navigator) {
 					}
 					Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
 				} else {
-					// Not logged in (or the session expired) - don't leave cached report data
-					// sitting in localStorage on a machine someone else might use.
+					// Not logged in (or the session expired) - clear both the localStorage
+					// cache AND whatever the boot script already painted from it, so a
+					// signed-out visitor on a shared machine doesn't keep seeing the prior
+					// session's cached report numbers next to the login prompt.
 					PMPRORD.clearCache();
-					jQuery('.ajax-reports-pwa').append(
+					jQuery('.ajax-reports-pwa').empty().append(
 						jQuery('<p/>').text(localized_strings.must_be_logged_in),
 						jQuery('<p/>').html('<a href="' + loginURL + '">' + localized_strings.login_to_access + '</a>'),
 					);
@@ -205,12 +209,21 @@ if ('serviceWorker' in navigator) {
 	}
 	jQuery(document).ready(function($) {
 		jQuery('body').on('click', '.refresh-all',	function() {
-			// Update the last updated date and time, and flag this button as syncing again.
+			// Update the last updated date and time.
 			jQuery('.last-updated').text(PMPRORD.formatDate(new Date(), localized_strings.last_updated) + ' ');
+
+			var reportNames = Object.keys(reports);
+			if (! reportNames.length) {
+				// Nothing to fetch - don't flag as syncing since it would never clear.
+				return;
+			}
+
 			jQuery(this).addClass('pmprord-syncing');
 
-			// Update the reports.
-			pmprordPending = Object.keys(reports).length;
+			// Add to, don't overwrite, the pending count - if a previous refresh is
+			// still in flight, each fetch's own ajax completion decrements exactly
+			// once, so overwriting here could zero it out before those finish.
+			pmprordPending += reportNames.length;
 			Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
 		});
 	});

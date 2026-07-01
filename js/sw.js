@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-rc1';
+var CACHE_NAME = 'pmpro-reports-dashboard-v2-rc1';
 var urlsToCache = [
 	'/pmpro-reports-dashboard/',
 	'/pmpro-reports-dashboard/manifest.js',
@@ -20,6 +20,26 @@ self.addEventListener('install', function(event) {
 
 // Cache and return requests.
 self.addEventListener('fetch', function(event) {
+	// The dashboard shell itself always goes to the network first, caching
+	// whatever comes back, and only falls back to the cached copy if the
+	// network request fails (e.g. offline). Cache-first here would mean any
+	// future edit to the shell needs a CACHE_NAME bump to ever reach visitors
+	// who already have this service worker installed - this avoids that trap.
+	if (event.request.mode === 'navigate') {
+		event.respondWith(
+			fetch(event.request).then(function(response) {
+				var responseToCache = response.clone();
+				caches.open(CACHE_NAME).then(function(cache) {
+					cache.put(event.request, responseToCache);
+				});
+				return response;
+			}).catch(function() {
+				return caches.match(event.request);
+			})
+		);
+		return;
+	}
+
 	event.respondWith(
 		caches.match(event.request)
 			.then(function(response) {
