@@ -250,32 +250,27 @@ button.refresh-all.pmprord-syncing::after {
 	opacity: 1;
 }
 
-[id^="pmpro_report_"] {
-	position: relative;
-}
-
 /* Dim everything but the heading (every widget wraps its content in one element
-   right after the <h2>) so the title stays readable while the data looks stale. */
+   right after the <h2>) so the title stays readable while the data looks stale.
+   The refresh button's own dot is the only "syncing" indicator - no need to
+   repeat it on every report box too. */
 [id^="pmpro_report_"].pmprord-updating > :not(h2) {
 	opacity: 0.6;
 	transition: opacity 0.2s ease;
 }
 
-[id^="pmpro_report_"].pmprord-updating::before {
-	animation: pmprord-pulse 1s ease-in-out infinite;
-	background: var(--pmpro--color--blue);
-	border-radius: 50%;
-	content: "";
-	height: 10px;
-	position: absolute;
-	right: 0;
-	top: var(--pmpro--spacing--large);
-	width: 10px;
-}
-
 .pmprord-refresh-error {
 	color: var(--pmpro--color--alert-text);
 	font-size: 13px;
+}
+
+.pmprord-view-all-link {
+	margin-top: var(--pmpro--spacing--large);
+	text-align: center;
+}
+
+.pmprord-view-all-link a {
+	color: #555555;
 }
 
 @keyframes pmprord-pulse {

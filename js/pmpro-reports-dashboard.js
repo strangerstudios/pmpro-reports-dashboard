@@ -27,11 +27,57 @@ if ('serviceWorker' in navigator) {
 		PMPRORD.writeCache(cache);
 	}
 
+	// Removes a single report from the cache (e.g. it used to have content and now
+	// doesn't), so a later cold load doesn't resurrect stale data from it.
+	function pmprordForgetCachedReport(name) {
+		var cache = PMPRORD.readCache();
+		if (cache && cache.reports && (name in cache.reports)) {
+			delete cache.reports[name];
+			cache.savedAt = Date.now();
+			PMPRORD.writeCache(cache);
+		}
+	}
+
 	// Marks the refresh button as syncing (or done) without touching report content.
 	// The dot lives on the button (to its right) rather than the badge text, and its
 	// space is always reserved in CSS, so nothing shifts when syncing starts or ends.
 	function pmprordSetSyncing(isSyncing) {
 		jQuery('.refresh-all').toggleClass('pmprord-syncing', isSyncing);
+	}
+
+	// A widget with nothing but a "Details" link isn't worth its own box - strip that
+	// link out and see if there's anything left to show.
+	function pmprordIsWidgetEmpty(html) {
+		var wrapper = document.createElement('div');
+		wrapper.innerHTML = html;
+		wrapper.querySelectorAll('.pmpro_report-button').forEach(function (el) {
+			el.remove();
+		});
+		return wrapper.textContent.replace(/\s+/g, '') === '';
+	}
+
+	// Shows a single "View All Reports" link at the bottom once any widgets have been
+	// skipped for having no content, and removes it again if that's no longer the case
+	// (e.g. after a refresh brings real data back).
+	function pmprordUpdateViewAllLink() {
+		var totalReports = Object.keys(reports).length;
+		// Direct children only - some widgets wrap their own content in an element
+		// that reuses the exact same id as our outer wrapper (a pre-existing quirk),
+		// which the descendant selector would double-count.
+		var renderedReports = jQuery('.ajax-reports-pwa').children('[id^="pmpro_report_"]').length;
+		var $link = jQuery('.pmprord-view-all-link');
+
+		if (totalReports > 0 && renderedReports < totalReports) {
+			if (! $link.length) {
+				jQuery('.ajax-reports-pwa').append(
+					jQuery('<p/>').addClass('pmprord-view-all-link').append(
+						jQuery('<a/>').attr('href', reportsAdminURL).text(localized_strings.view_all_reports)
+					)
+				);
+			}
+		} else {
+			$link.remove();
+		}
 	}
 
 	function pmprordLoadContentAfterDelay() {
@@ -81,7 +127,14 @@ if ('serviceWorker' in navigator) {
 			name: name,
 			hadCachedContent: hadCachedContent,
 			success: function (data) {
-				if(data) {
+				if (data && pmprordIsWidgetEmpty(data)) {
+					// Nothing but a "Details" link - drop the widget instead of showing
+					// an empty box; the view-all link at the bottom covers it. Also drop
+					// any previously cached content for it so a cold load doesn't bring
+					// stale (non-empty) data back for a report that's empty now.
+					jQuery('#pmpro_report_' + this.name).remove();
+					pmprordForgetCachedReport(this.name);
+				} else if(data) {
 					// Show report.
 					jQuery('#pmpro_report_' + this.name).removeClass('pmprord-updating pmprord-is-cached pmprord-fresh-placeholder').empty()
 						.append('<h2>' + title + '</h2>')
@@ -103,6 +156,7 @@ if ('serviceWorker' in navigator) {
 				// Floor at zero so an overlapping refresh (see the click handler below)
 				// can't drift the shared counter negative and desync the indicator.
 				pmprordPending = Math.max(0, pmprordPending - 1);
+				pmprordUpdateViewAllLink();
 				if (pmprordPending <= 0) {
 					pmprordSetSyncing(false);
 				}
@@ -170,7 +224,7 @@ if ('serviceWorker' in navigator) {
 					// if the reports list came back empty, e.g. from a failed list request,
 					// so we don't wipe good cached data over a transient error).
 					if (Object.keys(reports).length > 0) {
-						jQuery('.ajax-reports-pwa [id^="pmpro_report_"]').each(function () {
+						jQuery('.ajax-reports-pwa').children('[id^="pmpro_report_"]').each(function () {
 							if (!(this.id.replace('pmpro_report_', '') in reports)) {
 								jQuery(this).remove();
 							}

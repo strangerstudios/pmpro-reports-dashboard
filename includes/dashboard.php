@@ -1,5 +1,5 @@
 <?php
-	define( 'VERSION', 'rc2' );
+	define( 'VERSION', 'rc4' );
 ?>
 <html>
 	<head>
@@ -13,6 +13,7 @@
 		const homeURL = "<?php echo esc_url( home_url() ); ?>";
 		const loginURL = "<?php echo esc_url( wp_login_url( '/pmpro-reports-dashboard/?waitforlogin=1' ) ); ?>";
 		const spinnerURL = "<?php echo esc_url( plugins_url( 'images/loading.gif?ver=' . VERSION, dirname( __FILE__ ) ) );?>";
+		const reportsAdminURL = "<?php echo esc_url( admin_url( 'admin.php?page=pmpro-reports' ) ); ?>";
 		
 		// Preload the spinner.
 		var spinnerImage = new Image();
@@ -26,6 +27,7 @@
 			'must_be_logged_in': <?php echo json_encode( esc_html__( 'You must be logged in to view reports.', 'pmpro-reports-dashboard' ) ); ?>,
 			'login_to_access': <?php echo json_encode( esc_html__( 'Log in now to access this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
 			'refresh_failed': <?php echo json_encode( esc_html__( "Couldn't refresh, showing last saved data.", 'pmpro-reports-dashboard' ) ); ?>,
+			'view_all_reports': <?php echo json_encode( esc_html__( 'View All Reports', 'pmpro-reports-dashboard' ) ); ?>,
 		}
 
 		// PMPRORD: tiny, dependency-free localStorage cache used to instant-paint the
