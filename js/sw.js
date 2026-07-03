@@ -28,10 +28,14 @@ self.addEventListener('fetch', function(event) {
 	if (event.request.mode === 'navigate') {
 		event.respondWith(
 			fetch(event.request).then(function(response) {
-				var responseToCache = response.clone();
-				caches.open(CACHE_NAME).then(function(cache) {
-					cache.put(event.request, responseToCache);
-				});
+				// Only cache a genuinely successful, same-origin response - an error
+				// page or redirect shouldn't become the offline fallback shell.
+				if (response && response.status === 200 && response.type === 'basic') {
+					var responseToCache = response.clone();
+					caches.open(CACHE_NAME).then(function(cache) {
+						cache.put(event.request, responseToCache);
+					});
+				}
 				return response;
 			}).catch(function() {
 				return caches.match(event.request);

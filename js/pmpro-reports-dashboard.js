@@ -1,6 +1,11 @@
 if ('serviceWorker' in navigator) {
 	var reports = false;
 	var pmprordPending = 0;
+	// Per-report request counters, bumped every time fetchReports() runs for that
+	// name. Lets an in-flight request recognize it's been superseded by a newer one
+	// (e.g. two overlapping refreshes) and ignore its own response rather than
+	// letting a slower, older request clobber fresher content with stale data.
+	var pmprordGeneration = {};
 
 	// Reads the current reports cache, merges in this report's fresh HTML, prunes any
 	// report names that are no longer in the current reports list, and saves it back.
@@ -138,6 +143,9 @@ if ('serviceWorker' in navigator) {
 		});
 	});
 	function fetchReports(name, title) {
+		pmprordGeneration[name] = (pmprordGeneration[name] || 0) + 1;
+		var myGeneration = pmprordGeneration[name];
+
 		var existingBox = document.getElementById('pmpro_report_' + name);
 		var hadCachedContent = !! existingBox && ! existingBox.classList.contains('pmprord-fresh-placeholder');
 
@@ -163,6 +171,12 @@ if ('serviceWorker' in navigator) {
 			name: name,
 			hadCachedContent: hadCachedContent,
 			success: function (data) {
+				if (pmprordGeneration[this.name] !== myGeneration) {
+					// A newer request for this same report has started since this one
+					// went out (e.g. two overlapping refresh clicks) - whichever request
+					// started later should win, not whichever happens to respond last.
+					return;
+				}
 				if (data && pmprordIsWidgetEmpty(data)) {
 					// Nothing but a "Details" link - drop the widget instead of showing
 					// an empty box; the view-all link at the bottom covers it. Also drop
@@ -178,6 +192,11 @@ if ('serviceWorker' in navigator) {
 					pmprordCacheReport(this.name, title, data);
 				}
 			},error: function (xhr, ajaxOptions, thrownError) {
+				if (pmprordGeneration[this.name] !== myGeneration) {
+					// Superseded by a newer request for this report - a stale error
+					// shouldn't stomp on whatever that one already rendered.
+					return;
+				}
 				var box = jQuery('#pmpro_report_' + this.name).removeClass('pmprord-updating');
 				if (this.hadCachedContent) {
 					// Keep showing the last-known-good data instead of blowing it away.
@@ -194,10 +213,15 @@ if ('serviceWorker' in navigator) {
 				pmprordPending = Math.max(0, pmprordPending - 1);
 				if (pmprordPending <= 0) {
 					// Only reorder/re-check once everything has settled - doing it after
-					// every single fetch would just repeat the same work N times.
-					pmprordReorderReports();
-					pmprordReorderCache();
-					pmprordUpdateViewAllLink();
+					// every single fetch would just repeat the same work N times. Guard
+					// against `reports` somehow not being a plain object at this point
+					// (e.g. a future edit to an error path) - these all call
+					// Object.keys(reports) and assume it's safe to do so.
+					if (reports && typeof reports === 'object') {
+						pmprordReorderReports();
+						pmprordReorderCache();
+						pmprordUpdateViewAllLink();
+					}
 					pmprordSetSyncing(false);
 				}
 			}
@@ -244,10 +268,14 @@ if ('serviceWorker' in navigator) {
 							cache: false,
 							success: function (data) {
 								// A -1 response means the user doesn't have permissions to view reports.
+								// location.replace() doesn't halt execution, so without this return,
+								// reports would still get set to the string "-1" and Object.entries()
+								// would iterate its characters, firing bogus fetches before the redirect.
 								if(data == '-1') {
 									PMPRORD.clearCache();
 									jQuery('.ajax-reports-pwa').empty().append(jQuery('<p/>').text(localized_strings.no_permission));
 									window.location.replace(homeURL);
+									return;
 								}
 
 								// Update the reports.
