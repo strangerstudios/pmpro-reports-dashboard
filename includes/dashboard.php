@@ -1,5 +1,5 @@
 <?php
-	define( 'VERSION', 'rc4' );
+	define( 'VERSION', 'rc5' );
 ?>
 <html>
 	<head>

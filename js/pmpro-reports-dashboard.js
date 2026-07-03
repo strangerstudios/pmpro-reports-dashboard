@@ -72,6 +72,26 @@ if ('serviceWorker' in navigator) {
 		});
 	}
 
+	// Rewrites the cache so its key order matches the current report order too, not
+	// just the DOM. pmprordCacheReport() writes each report as its own ajax happens to
+	// complete (network order), so without this, the *next* boot-paint would still
+	// flash whatever order requests settled in on this load, even after the DOM above
+	// gets corrected.
+	function pmprordReorderCache() {
+		var cache = PMPRORD.readCache();
+		if (!cache || !cache.reports) {
+			return;
+		}
+		var reordered = {};
+		Object.keys(reports).forEach(function (name) {
+			if (name in cache.reports) {
+				reordered[name] = cache.reports[name];
+			}
+		});
+		cache.reports = reordered;
+		PMPRORD.writeCache(cache);
+	}
+
 	// Shows a single "View All Reports" link at the bottom once any widgets have been
 	// skipped for having no content, and removes it again if that's no longer the case
 	// (e.g. after a refresh brings real data back).
@@ -176,6 +196,7 @@ if ('serviceWorker' in navigator) {
 					// Only reorder/re-check once everything has settled - doing it after
 					// every single fetch would just repeat the same work N times.
 					pmprordReorderReports();
+					pmprordReorderCache();
 					pmprordUpdateViewAllLink();
 					pmprordSetSyncing(false);
 				}
