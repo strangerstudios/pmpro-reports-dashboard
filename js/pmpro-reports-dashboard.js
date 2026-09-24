@@ -1,29 +1,57 @@
 if ('serviceWorker' in navigator) {
 	var reports = false;
+	var pmprordPending = 0;
+	var pmprordFailed = false;
 	window.addEventListener('load', function() {
 		navigator.serviceWorker.register('/pmpro-reports-dashboard/sw.js').then(function(registration) {
 			// Registration was successful
 			console.log('ServiceWorker registration successful with scope: ', registration.scope);
-						
-			// Need to pause a second for logins?
-			let timetowait = 10;
-			let urlParams = new URLSearchParams(window.location.search);			
-			if( urlParams.has('waitforlogin' ) ) {
-				timetowait = 1000;
-			}
-			setTimeout( function() { checkLoginAndLoadContent(); }, timetowait );			
-						
+			loadContentAfterDelay();
 		}, function(err) {
-			// registration failed :(
+			// Registration failed, but the reports don't depend on the service worker, so load them anyway.
 			console.log('ServiceWorker registration failed: ', err);
+			loadContentAfterDelay();
 		});
 	});
-	function fetchReports(name, title) {
-		// Remove the old report box.
-		jQuery('#pmpro_report_' + name).remove();
+	function loadContentAfterDelay() {
+		// Need to pause a second for logins?
+		let timetowait = 10;
+		let urlParams = new URLSearchParams(window.location.search);
+		if( urlParams.has('waitforlogin' ) ) {
+			timetowait = 1000;
+		}
+		setTimeout( function() { checkLoginAndLoadContent(); }, timetowait );
+	}
+	function cacheReport(name, title, html) {
+		// Rebuild the cache in the current report order, dropping reports that no longer exist.
+		var cached = PMPRORD.readCache();
+		var cache = { user: pmprordUser, savedAt: Date.now(), reports: {} };
+		Object.keys(reports).forEach(function(reportName) {
+			if (reportName === name) {
+				// Scripts (e.g. charts) don't run when the cache is painted, so don't cache reports that need them.
+				if (! /<script[\s>]/i.test(html)) {
+					cache.reports[reportName] = { title: title, html: html };
+				}
+			} else if (cached && cached.reports[reportName]) {
+				cache.reports[reportName] = cached.reports[reportName];
+			}
+		});
+		PMPRORD.writeCache(cache);
+	}
+	function refreshReports() {
+		pmprordPending = Object.keys(reports).length;
+		pmprordFailed = false;
+		if (pmprordPending === 0) {
+			return;
+		}
 
-		// Add placeholder.
-		jQuery('.ajax-reports-pwa').append('<div id="pmpro_report_' + name + '"><h2>' + title + '</h2><img src="' + spinnerURL +'" class="spinner" /></div>');
+		// Disable the refresh button until all reports are back.
+		jQuery('.refresh-all').prop('disabled', true);
+		Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
+	}
+	function fetchReports(name, title) {
+		// Dim the report box while it loads.
+		jQuery('.ajax-reports-pwa').children('#pmpro_report_' + name).addClass('pmprord-updating');
 
 		// Load report via AJAX.
 		jQuery.ajax({
@@ -38,13 +66,33 @@ if ('serviceWorker' in navigator) {
 			success: function (data) {
 				if(data) {
 					// Show report.
-					jQuery('#pmpro_report_' + this.name).empty()
+					jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name).removeClass('pmprord-placeholder').empty()
 						.append('<h2>' + title + '</h2>')
 						.append(data);
+					cacheReport(this.name, title, data);
 				}
 			},error: function (xhr, ajaxOptions, thrownError) {
-				// Show error in report box.
-				jQuery('#pmpro_report_' + this.name).empty().append(xhr.responseText);
+				pmprordFailed = true;
+				var box = jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name);
+				if (box.hasClass('pmprord-placeholder')) {
+					// Nothing loaded yet, so show the error in the report box.
+					box.empty().append(xhr.responseText);
+				} else {
+					// Keep showing the last loaded report.
+					box.find('.pmprord-refresh-error').remove();
+					box.append(jQuery('<p/>').addClass('pmprord-refresh-error').text(localized_strings.refresh_failed));
+				}
+			}, complete: function() {
+				jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name).removeClass('pmprord-updating');
+
+				pmprordPending--;
+				if (pmprordPending === 0) {
+					// Only update the last updated date and time if everything refreshed.
+					if (! pmprordFailed) {
+						jQuery('.last-updated').text(PMPRORD.formatDate(new Date()));
+					}
+					jQuery('.refresh-all').prop('disabled', false);
+				}
 			}
 		});
 	}
@@ -56,22 +104,13 @@ if ('serviceWorker' in navigator) {
 			type: 'GET',
 			data: { 'action':'pmpro_reports_check_login'},
 			cache: false,
-			success: function (data) {					
+			success: function (data) {
 				if(data == '1') {
-					// Get the current date and format it
-					const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-					const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-
-					// Append the last updated date
-					jQuery('.ajax-reports-pwa').append(jQuery('<span/>').addClass('last-updated').text(localized_strings.last_updated
-						.replace('%s', currentDate)
-						.replace('%s', currentTime) + ' '));
-
-					// Append the refresh button
-					jQuery('.ajax-reports-pwa').append(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
-
-					// Show spinner.
-					jQuery('.ajax-reports-pwa').append(jQuery('<img/>').addClass('preloader-wrapper fetching-reports').attr('src', spinnerURL));
+					// Add the last updated date (filled in once the reports load) and the refresh button, unless they were painted from the cache.
+					if (! jQuery('.last-updated').length) {
+						jQuery('.ajax-reports-pwa').prepend(jQuery('<span/>').addClass('last-updated'));
+					}
+					jQuery('.last-updated').after(jQuery('<button/>').addClass('btn btn-primary refresh-all').text(localized_strings.refresh));
 
 					// Get list of reports.
 					if ( reports === false ) {
@@ -85,10 +124,12 @@ if ('serviceWorker' in navigator) {
 							success: function (data) {
 								// A -1 response means the user doesn't have permissions to view reports.
 								if(data == '-1') {
+									PMPRORD.clearCache();
 									jQuery('.ajax-reports-pwa').empty().append(jQuery('<p/>').text(localized_strings.no_permission));
 									window.location.replace(homeURL);
+									return;
 								}
-								
+
 								// Update the reports.
 								reports = data;
 							},error: function (xhr, ajaxOptions, thrownError) {
@@ -99,13 +140,29 @@ if ('serviceWorker' in navigator) {
 						});
 					}
 
-					// Remove spinner.
-					jQuery('.fetching-reports').remove();
+					// Remove cached reports that no longer exist.
+					var container = jQuery('.ajax-reports-pwa');
+					container.children('[id^="pmpro_report_"]').each(function() {
+						if (! (this.id.replace('pmpro_report_', '') in reports)) {
+							jQuery(this).remove();
+						}
+					});
 
-					Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
+					// Put the report boxes in order, adding a placeholder for any report that wasn't cached.
+					Object.entries(reports).forEach(([name, title]) => {
+						var box = container.children('#pmpro_report_' + name);
+						if (! box.length) {
+							box = jQuery(PMPRORD.reportHTML(name, title, '<img src="' + spinnerURL + '" class="spinner" />', 'pmprord-placeholder'));
+						}
+						container.append(box);
+					});
+
+					refreshReports();
 				} else {
-					jQuery('.ajax-reports-pwa').append(
-						jQuery('<p/>').text(localized_strings.must_be_logged_in), 
+					// Not logged in, so clear any reports painted from the cache.
+					PMPRORD.clearCache();
+					jQuery('.ajax-reports-pwa').empty().append(
+						jQuery('<p/>').text(localized_strings.must_be_logged_in),
 						jQuery('<p/>').html('<a href="' + loginURL + '">' + localized_strings.login_to_access + '</a>'),
 					);
 				}
@@ -122,15 +179,7 @@ if ('serviceWorker' in navigator) {
 	}
 	jQuery(document).ready(function($) {
 		jQuery('body').on('click', '.refresh-all',	function() {
-			// Update the last updated date and time.
-			const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-			const currentTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-			jQuery('.last-updated').text(localized_strings.last_updated
-				.replace('%s', currentDate)
-				.replace('%s', currentTime) + ' ');
-
-			// Update the reports.
-			Object.entries(reports).forEach(([name, title]) => fetchReports(name, title));
+			refreshReports();
 		});
 	});
 }

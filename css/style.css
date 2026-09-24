@@ -169,6 +169,21 @@ button.refresh-all {
 	text-decoration: underline;
 }
 
+button.refresh-all:disabled {
+	cursor: default;
+	opacity: 0.5;
+}
+
+/* Dim a report's content, but not its heading, while it refreshes. */
+.pmprord-updating:not(.pmprord-placeholder) > :not(h2) {
+	opacity: 0.6;
+}
+
+.pmprord-refresh-error {
+	color: var(--pmpro--color--alert-text);
+	font-size: 13px;
+}
+
 /**
  * Report styles
  */

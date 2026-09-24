@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-rc1';
+var CACHE_NAME = 'pmpro-reports-dashboard-v2-rc1';
 var urlsToCache = [
 	'/pmpro-reports-dashboard/',
 	'/pmpro-reports-dashboard/manifest.js',
@@ -20,6 +20,29 @@ self.addEventListener('install', function(event) {
 
 // Cache and return requests.
 self.addEventListener('fetch', function(event) {
+	// Never cache AJAX requests. They are unique per request and include report data.
+	if (event.request.url.indexOf('/wp-admin/admin-ajax.php') !== -1) {
+		return;
+	}
+
+	// Load the dashboard itself from the network so updates show up, falling back to the cache when offline.
+	if (event.request.mode === 'navigate') {
+		event.respondWith(
+			fetch(event.request).then(function(response) {
+				if (response && response.status === 200 && response.type === 'basic') {
+					var responseToCache = response.clone();
+					caches.open(CACHE_NAME).then(function(cache) {
+						cache.put(event.request, responseToCache);
+					});
+				}
+				return response;
+			}).catch(function() {
+				return caches.match(event.request);
+			})
+		);
+		return;
+	}
+
 	event.respondWith(
 		caches.match(event.request)
 			.then(function(response) {
