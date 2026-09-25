@@ -32,14 +32,19 @@
 
 		// Cache of the last loaded reports so that returning users see them right away while fresh data loads.
 		var PMPRORD = {
-			CACHE_KEY: 'pmprord_reports_cache',
-			// Returns the cache if it belongs to the current user, null otherwise.
+			CACHE_KEY: 'pmprord_reports_cache_v1',
+			// Returns the cache if it is valid and belongs to the current user, null otherwise.
 			readCache: function() {
 				try {
 					var cache = JSON.parse( window.localStorage.getItem( this.CACHE_KEY ) );
-					if ( cache && pmprordUser && cache.user === pmprordUser && typeof cache.reports === 'object' ) {
-						return cache;
+					if ( ! cache || ! pmprordUser || cache.user !== pmprordUser || typeof cache.savedAt !== 'number' || ! cache.reports || typeof cache.reports !== 'object' ) {
+						return null;
 					}
+					var valid = Object.keys( cache.reports ).every( function( name ) {
+						var report = cache.reports[ name ];
+						return report && typeof report.title === 'string' && typeof report.html === 'string';
+					} );
+					return valid ? cache : null;
 				} catch ( e ) {}
 				return null;
 			},
