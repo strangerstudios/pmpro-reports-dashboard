@@ -25,7 +25,8 @@ if ('serviceWorker' in navigator) {
 	function cacheReport(name, title, html) {
 		// Rebuild the cache in the current report order, dropping reports that no longer exist.
 		var cached = PMPRORD.readCache();
-		var cache = { user: pmprordUser, savedAt: Date.now(), reports: {} };
+		// Keep the previous saved time. It is only updated once all reports have refreshed.
+		var cache = { user: pmprordUser, savedAt: cached ? cached.savedAt : Date.now(), reports: {} };
 		Object.keys(reports).forEach(function(reportName) {
 			if (reportName === name) {
 				// Scripts (e.g. charts) don't run when the cache is painted, so don't cache reports that need them.
@@ -89,7 +90,13 @@ if ('serviceWorker' in navigator) {
 				if (pmprordPending === 0) {
 					// Only update the last updated date and time if everything refreshed.
 					if (! pmprordFailed) {
-						jQuery('.last-updated').text(PMPRORD.formatDate(new Date()));
+						var now = new Date();
+						jQuery('.last-updated').text(PMPRORD.formatDate(now));
+						var cache = PMPRORD.readCache();
+						if (cache) {
+							cache.savedAt = now.getTime();
+							PMPRORD.writeCache(cache);
+						}
 					}
 					jQuery('.refresh-all').prop('disabled', false);
 				}
@@ -138,6 +145,11 @@ if ('serviceWorker' in navigator) {
 								reports = [];
 							}
 						});
+					}
+
+					// If the list of reports couldn't be loaded, keep showing any cached reports.
+					if (! Object.keys(reports).length) {
+						return;
 					}
 
 					// Remove cached reports that no longer exist.

@@ -1,7 +1,5 @@
 var CACHE_NAME = 'pmpro-reports-dashboard-v2-rc1';
 var urlsToCache = [
-	'/pmpro-reports-dashboard/',
-	'/pmpro-reports-dashboard/manifest.js',
 	'/wp-includes/js/jquery/jquery.js',
 	'/wp-content/plugins/pmpro-reports-dashboard/js/pmpro-reports-dashboard.js'
 ];
@@ -25,21 +23,8 @@ self.addEventListener('fetch', function(event) {
 		return;
 	}
 
-	// Load the dashboard itself from the network so updates show up, falling back to the cache when offline.
+	// Never cache the dashboard itself. It is specific to the logged in user and should always be up to date.
 	if (event.request.mode === 'navigate') {
-		event.respondWith(
-			fetch(event.request).then(function(response) {
-				if (response && response.status === 200 && response.type === 'basic') {
-					var responseToCache = response.clone();
-					caches.open(CACHE_NAME).then(function(cache) {
-						cache.put(event.request, responseToCache);
-					});
-				}
-				return response;
-			}).catch(function() {
-				return caches.match(event.request);
-			})
-		);
 		return;
 	}
 
@@ -81,7 +66,7 @@ self.addEventListener('activate', function(event) {
 	event.waitUntil(
 		caches.keys().then(function(keys) {
 			return Promise.all(keys
-				.filter(key => key !== CACHE_NAME)
+				.filter(key => key.startsWith('pmpro-reports-dashboard-') && key !== CACHE_NAME)
 				.map(key => caches.delete(key))
 			)
 		})
