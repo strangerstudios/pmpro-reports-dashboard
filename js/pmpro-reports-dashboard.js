@@ -72,7 +72,7 @@ function fetchReports(name, title) {
 		success: function (data) {
 			if(data) {
 				// Show report.
-				jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name).removeClass('pmprord-placeholder').empty()
+				jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name).removeClass('pmprord-placeholder pmprord-updating').empty()
 					.append('<h2>' + title + '</h2>')
 					.append(data);
 				cacheReport(this.name, title, data);
@@ -84,13 +84,11 @@ function fetchReports(name, title) {
 				// Nothing loaded yet, so show the error in the report box.
 				box.empty().append(xhr.responseText);
 			} else {
-				// Keep showing the last loaded report.
+				// Keep showing the last loaded report, still dimmed since it couldn't be checked.
 				box.find('.pmprord-refresh-error').remove();
 				box.append(jQuery('<p/>').addClass('pmprord-refresh-error').text(localized_strings.refresh_failed));
 			}
 		}, complete: function() {
-			jQuery('.ajax-reports-pwa').children('#pmpro_report_' + this.name).removeClass('pmprord-updating');
-
 			pmprordPending--;
 			if (pmprordPending === 0) {
 				// Only update the last updated date and time if everything refreshed.
@@ -146,6 +144,7 @@ function checkLoginAndLoadContent() {
 							reports = data;
 						},error: function (xhr, ajaxOptions, thrownError) {
 							// Show error in report box.
+							jQuery('.ajax-reports-pwa').prepend(jQuery('<p/>').addClass('pmprord-refresh-error').text(localized_strings.load_failed));
 							jQuery('.ajax-reports-pwa').append(xhr.responseText);
 							reports = [];
 						}
@@ -185,6 +184,7 @@ function checkLoginAndLoadContent() {
 			}
 		},error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.responseText);
+			jQuery('.ajax-reports-pwa').prepend(jQuery('<p/>').addClass('pmprord-refresh-error').text(localized_strings.load_failed));
 		}, complete: function() {
 			// Hide loading logo gif.
 			jQuery('.preloader-wrapper').hide();

@@ -174,8 +174,8 @@ button.refresh-all:disabled {
 	opacity: 0.5;
 }
 
-/* Dim a report's content, but not its heading, while it refreshes. */
-.pmprord-updating:not(.pmprord-placeholder) > :not(h2) {
+/* Dim a report's content, but not its heading or error notice, until it has been checked. */
+.pmprord-updating:not(.pmprord-placeholder) > :not(h2):not(.pmprord-refresh-error) {
 	opacity: 0.6;
 }
 

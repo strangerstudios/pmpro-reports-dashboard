@@ -28,6 +28,7 @@
 			'must_be_logged_in': <?php echo json_encode( esc_html__( 'You must be logged in to view reports.', 'pmpro-reports-dashboard' ) ); ?>,
 			'login_to_access': <?php echo json_encode( esc_html__( 'Log in now to access this dashboard.', 'pmpro-reports-dashboard' ) ); ?>,
 			'refresh_failed': <?php echo json_encode( esc_html__( 'Could not refresh. Showing last saved data.', 'pmpro-reports-dashboard' ) ); ?>,
+			'load_failed': <?php echo json_encode( esc_html__( 'Could not load the latest reports.', 'pmpro-reports-dashboard' ) ); ?>,
 		}
 
 		// Cache of the last loaded reports so that returning users see them right away while fresh data loads.
