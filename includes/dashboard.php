@@ -74,9 +74,10 @@
 					return;
 				}
 
+				// Dim cached reports until they have been checked against the latest data.
 				var html = '';
 				Object.keys( cache.reports ).forEach( function( name ) {
-					html += PMPRORD.reportHTML( name, cache.reports[ name ].title, cache.reports[ name ].html, '' );
+					html += PMPRORD.reportHTML( name, cache.reports[ name ].title, cache.reports[ name ].html, 'pmprord-updating' );
 				} );
 				if ( ! html ) {
 					return;
