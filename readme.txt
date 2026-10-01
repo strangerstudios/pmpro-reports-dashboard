@@ -2,9 +2,9 @@
 Contributors: strangerstudios
 Tags: pmpro, reports, admin, mobile reports
 Requires at least: 5.4
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.3
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 == Description ==
 A streamlined membership site reports dashboard designed for mobile and responsive screens that loads outside of your WordPress admin.
@@ -25,6 +25,15 @@ Simply install and activate the plugin and the reports dashboard will be added t
 Please post it in the issues section of GitHub and we'll fix it as soon as we can. Thanks for helping. https://github.com/strangerstudios/pmpro-reports-dashboard/issues
 
 == Changelog ==
+
+= 1.0.2 - 2026-10-01 =
+* SECURITY: Improved sanitization and escaping throughout the plugin to resolve Plugin Check security findings. #18 (@dparker1005)
+* ENHANCEMENT: The mobile reports dashboard now shows your last loaded reports right away while fresh data loads. #17 (@dparker1005)
+* ENHANCEMENT: The mobile reports dashboard service worker no longer caches the dashboard page or report responses, so report data is always loaded from the site. #17 (@dparker1005)
+* BUG FIX: Fixed the login check failing for logged-out visitors on the mobile reports dashboard, which prevented the login prompt from showing. #17 (@dparker1005)
+* BUG FIX: Fixed the mobile reports dashboard not loading when a service worker could not be registered or is not supported, such as on sites served over HTTP. #17 (@dparker1005)
+* BUG FIX: Fixed the mobile reports dashboard service worker deleting caches that belong to other plugins when it updates. #17 (@dparker1005)
+* BUG FIX: Fixed the error message for an invalid report name not being shown. #18 (@dparker1005)
 
 = 1.0.1 - 2026-05-04 =
 * BUG FIX: Fixed duplicate "View Mobile Reports" button appearing on the PMPro Reports admin page in PMPro v3.0+ where two `h1` tags caused the button to be added twice. #14 (@kimcoleman)
