@@ -1,7 +1,5 @@
-var CACHE_NAME = 'pmpro-reports-dashboard-v1-rc1';
+var CACHE_NAME = 'pmpro-reports-dashboard-v2-rc1';
 var urlsToCache = [
-	'/pmpro-reports-dashboard/',
-	'/pmpro-reports-dashboard/manifest.js',
 	'/wp-includes/js/jquery/jquery.js',
 	'/wp-content/plugins/pmpro-reports-dashboard/js/pmpro-reports-dashboard.js'
 ];
@@ -20,6 +18,16 @@ self.addEventListener('install', function(event) {
 
 // Cache and return requests.
 self.addEventListener('fetch', function(event) {
+	// Never cache AJAX requests. They are unique per request and include report data.
+	if (event.request.url.indexOf('/wp-admin/admin-ajax.php') !== -1) {
+		return;
+	}
+
+	// Never cache the dashboard itself. It is specific to the logged in user and should always be up to date.
+	if (event.request.mode === 'navigate') {
+		return;
+	}
+
 	event.respondWith(
 		caches.match(event.request)
 			.then(function(response) {
@@ -58,7 +66,7 @@ self.addEventListener('activate', function(event) {
 	event.waitUntil(
 		caches.keys().then(function(keys) {
 			return Promise.all(keys
-				.filter(key => key !== CACHE_NAME)
+				.filter(key => key.startsWith('pmpro-reports-dashboard-') && key !== CACHE_NAME)
 				.map(key => caches.delete(key))
 			)
 		})
