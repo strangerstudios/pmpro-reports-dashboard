@@ -10,6 +10,10 @@ Text Domain: pmpro-reports-dashboard
 Domain Path: /languages
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 define( 'PMPRORD_DIR', plugin_dir_path( __FILE__ ) );
 
 /**
@@ -18,7 +22,9 @@ define( 'PMPRORD_DIR', plugin_dir_path( __FILE__ ) );
 function pmprord_controller() {
 	global $wp_filesystem;
 	
-	if ( empty( $_REQUEST['pmpro_reports_action'] ) && strpos( $_SERVER['REQUEST_URI'], '/pmpro-reports-dashboard' ) !== 0 ) {
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only compared with strpos() for routing.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only routing check.
+	if ( empty( $_REQUEST['pmpro_reports_action'] ) && strpos( $request_uri, '/pmpro-reports-dashboard' ) !== 0 ) {
 		return;
 	}
 	
@@ -31,62 +37,62 @@ function pmprord_controller() {
 		case 'sw':
 			// load the SW JS
 			header('Content-Type: application/javascript');			
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/js/sw.js' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/js/sw.js' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'manifest':
 			// load the PWA manifest
 			header('Content-Type: application/json');			
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/manifest.json' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/manifest.json' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon48':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-48.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-48.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon72':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-72.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-72.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon96':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-96.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-96.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon128':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-128.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-128.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon144':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-144.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-144.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon180':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-180.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-180.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon192':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-192.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-192.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon512':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-512.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-512.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon750':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-750.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-750.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		case 'icon1024':
 			// load the app icon
 			header('Content-Type: image/png');
-			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-1024.png' );
+			echo $wp_filesystem->get_contents( PMPRORD_DIR . '/images/icon-1024.png' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static file bundled with the plugin; escaping would corrupt it.
 			break;
 		default:
 			include( 'includes/dashboard.php' );
@@ -147,11 +153,13 @@ add_filter( 'redirect_canonical', 'pmprordb_redirect_canonical_callback', 100, 2
 function pmprordb_add_links_report_page() {
 
 	// Only load on the reports main page.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page detection.
 	if ( ! isset( $_REQUEST['page'] ) ||  $_REQUEST['page'] != 'pmpro-reports' ) {
 		return;
 	}
 
 	// We're viewing an individual report page, let's not show the link.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin page detection.
 	if ( isset( $_REQUEST['report'] ) && $_REQUEST['page'] == 'pmpro-reports' ) {
 		return;
 	}
@@ -185,11 +193,11 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'pmprordb_add_ac
  * Redirect the old ?pmpro_reports=true to the new /pmpro-reports-dashboard/ URL.
  */
 function pmprordb_redirect_old_url() {
-	if ( ! isset( $_REQUEST['pmpro_reports'] ) ) {
+	if ( ! isset( $_REQUEST['pmpro_reports'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check; only triggers a redirect to a fixed URL.
 		return;
 	}
 	
-	wp_redirect( site_url( '/pmpro-reports-dashboard/' ) );
+	wp_redirect( site_url( '/pmpro-reports-dashboard/' ) ); // phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- Fixed same-site path; wp_safe_redirect() only allows the home_url() host and would fall back to wp-admin if site_url() uses a different host.
 	exit;
 }
 add_action( 'init', 'pmprordb_redirect_old_url' );
@@ -226,10 +234,10 @@ function pmpro_reports_ajax( ) {
 		wp_die();
 	}
 	
-	$report_name = sanitize_text_field( $_GET['report_name'] );
+	$report_name = isset( $_GET['report_name'] ) ? sanitize_text_field( wp_unslash( $_GET['report_name'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only report display; capability checked above.
 	// Bail if given name does not belong to a PMPro report.
 	if( ! in_array( $report_name, array_keys( $pmpro_reports ) ) )  {
-		esc_html__( 'Invalid report name.', 'pmpro-reports-dashboard' ); 
+		esc_html_e( 'Invalid report name.', 'pmpro-reports-dashboard' ); 
 		wp_die();
 	}
 	call_user_func( "pmpro_report_" . esc_attr( $report_name ) . "_widget" );

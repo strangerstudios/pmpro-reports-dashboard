@@ -1,4 +1,7 @@
 <?php
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit;
+	}
 	define( 'VERSION', 'rc2' );
 ?>
 <html>
